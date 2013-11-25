@@ -10,7 +10,7 @@ checkout the various branches.
 
 ----
 
-#Welcome to the Begin branch!
+#Let's Begin: The Basic Project Structure
 
 This branch embodies the basic set up for our application.
 
