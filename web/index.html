@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html ng-app="minesweeper">
+<head>
+    <title>Mine Sweeper in Angular</title>
+    <link rel="stylesheet" href="minesweeper.css"/>
+</head>
+<body>
+<div ng-controller="MineSweeperCtrl">
+    <div class="grid">
+        <div class="row" ng-repeat="row in grid track by $index">
+            <div class="cell" ng-repeat="cell in row track by $index"></div>
+        </div>
+    </div>
+</div>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="js/minesweeper.js"></script>
+</body>
+</html>

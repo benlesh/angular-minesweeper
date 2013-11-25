@@ -1,0 +1,15 @@
+.row {
+    clear: both;
+    margin: 0;
+    padding: 0;
+}
+
+.cell {
+    float: left;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin: 1px;
+}
