@@ -1,0 +1,5 @@
+node_modules/
+bower_components/
+_SpecRunner.html
+.grunt/
+.idea/

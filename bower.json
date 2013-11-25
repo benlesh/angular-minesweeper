@@ -1,0 +1,23 @@
+{
+  "name": "angular-minesweeper",
+  "version": "0.0.0",
+  "description": "Playing with AngularJS",
+  "main": "web/js/minesweeper.js",
+  "keywords": [
+    "Game",
+    "AngularJS"
+  ],
+  "authors": [
+    "Ben Lesh"
+  ],
+  "license": "MIT",
+  "homepage": "http://www.benlesh.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
