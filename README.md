@@ -5,6 +5,10 @@ MIT License
 
 A step by step guide to creating a very simple minesweeper game in Angular.
 
+To view the various "steps" in development, (or at least the development in different stages as it progresses), please
+checkout the various branches.
+
+----
 
 #Welcome to the Begin branch!
 
@@ -21,3 +25,4 @@ down from Bower, such as AngularJS and Angular's test suite Angular-Mocks.
 4. A basic file structure. We need to organize our code in a way that is easy to manage, so I've seperated our testing
 files (Jasmine specs) into a folder called `tests/` and the source for our minesweeper module into a folder call `src/`.
 Output JS files will be stored in `web/js`, and our .html file will be in `web/`.
+
