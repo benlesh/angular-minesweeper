@@ -11,16 +11,9 @@ describe('minesweeper MineSweeperCtrl', function () {
 
             $scope = $rootScope.$new();
 
-            /*
-             So we can specify what Math.random() will return, we're setting up $randomData
-             to be an array Math.random pulls from
-             */
             mockWindow = {
                 Math: {
-                    $randomData: [0.1],
-                    random: jasmine.createSpy('Math.random').andCallFake(function () {
-                        return mockWindow.Math.$randomData[r++ % mockWindow.Math.$randomData.length];
-                    }),
+                    random: Math.random,
                     floor: Math.floor
                 }
             };
@@ -34,11 +27,11 @@ describe('minesweeper MineSweeperCtrl', function () {
 
     describe('in ctor', function () {
         it('should set $scope.gridWidth', function () {
-            expect($scope.gridWidth).toBe(20);
+            expect($scope.gridWidth).toBeGreaterThan(2);
         });
 
         it('should set $scope.gridHeight', function () {
-            expect($scope.gridHeight).toBe(20);
+            expect($scope.gridHeight).toBeGreaterThan(2);
         });
 
         it('should set $scope.grid', function () {
@@ -96,7 +89,7 @@ describe('minesweeper MineSweeperCtrl', function () {
 
         describe('when Math.random() returns .5 every time', function () {
             beforeEach(function () {
-                mockWindow.Math.$randomData = [0.5];
+                mockWindow.Math.random = jasmine.createSpy('Math.random').andReturn(0.5);
                 cell = mineSweeperCtrl.getRandomCell(grid);
             });
 
@@ -108,7 +101,7 @@ describe('minesweeper MineSweeperCtrl', function () {
 
         describe('when Math.random() returns .9 every time', function () {
             beforeEach(function () {
-                mockWindow.Math.$randomData = [0.9];
+                mockWindow.Math.random = jasmine.createSpy('Math.random').andReturn(0.9);
                 cell = mineSweeperCtrl.getRandomCell(grid);
             });
 

@@ -13,3 +13,13 @@
     border: 1px solid #ccc;
     margin: 1px;
 }
+
+.mine:after {
+    font-family: Wingdings, sans-serif;
+    content: "M";
+}
+
+.flag:after {
+    font-family: Wingdings, sans-serif;
+    content: "P";
+}

@@ -36,14 +36,14 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
 
                 while (laid < mineCount) {
                     cell = ctrl.getRandomCell(grid);
-                    if(!cell.mine) {
+                    if (!cell.mine) {
                         cell.mine = true;
                         laid++;
                     }
                 }
             };
 
-            ctrl.getRandomCell = function(grid) {
+            ctrl.getRandomCell = function (grid) {
                 var height = grid.length,
                     width = grid[0].length,
                     x = Math.floor(Math.random() * width),
@@ -52,9 +52,11 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 return grid[y][x];
             };
 
-            $scope.gridWidth = 20;
-            $scope.gridHeight = 20;
+            $scope.gridWidth = 8;
+            $scope.gridHeight = 8;
+            $scope.mineCount = 10;
 
             $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
+            ctrl.addMines($scope.grid, $scope.mineCount);
         }
     ]);
