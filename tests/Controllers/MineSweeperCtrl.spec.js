@@ -14,7 +14,9 @@ describe('minesweeper MineSweeperCtrl', function () {
             mockWindow = {
                 Math: {
                     random: Math.random,
-                    floor: Math.floor
+                    floor: Math.floor,
+                    min: Math.min,
+                    max: Math.max
                 }
             };
 
@@ -39,6 +41,55 @@ describe('minesweeper MineSweeperCtrl', function () {
             expect(Object.prototype.toString.call($scope.grid[0])).toBe('[object Array]');
         });
     });
+
+    describe('traverseNearbyCells(grid, originX, originY, fn)', function () {
+        var grid,
+            cellsTraversed;
+
+        beforeEach(function () {
+            grid = mineSweeperCtrl.createGrid(5, 5);
+            cellsTraversed = [];
+        });
+
+        describe('when origin is 0, 0 on a 5 x 5 grid', function () {
+            beforeEach(function () {
+                mineSweeperCtrl.traverseNearbyCells(grid, 0, 0, function (cell) {
+                    cellsTraversed.push(cell);
+                });
+            });
+
+            it('should only traverse 3 cells', function () {
+                expect(cellsTraversed.length).toBe(3);
+            });
+        });
+
+
+        describe('when origin is 2, 2 on a 5 x 5 grid', function () {
+            beforeEach(function () {
+                mineSweeperCtrl.traverseNearbyCells(grid, 2, 2, function (cell) {
+                    cellsTraversed.push(cell);
+                });
+            });
+
+            it('should traverse 8 cells', function () {
+                expect(cellsTraversed.length).toBe(8);
+            });
+        });
+
+
+        describe('when origin is 4, 4 on a 5 x 5 grid', function () {
+            beforeEach(function () {
+                mineSweeperCtrl.traverseNearbyCells(grid, 4, 4, function (cell) {
+                    cellsTraversed.push(cell);
+                });
+            });
+
+            it('should only traverse 3 cells', function () {
+                expect(cellsTraversed.length).toBe(3);
+            });
+        });
+    });
+
 
     describe('addMines(grid, mineCount)', function () {
         var grid,
@@ -66,15 +117,32 @@ describe('minesweeper MineSweeperCtrl', function () {
             });
 
             it('should set exactly 5 mines', function () {
-                angular.forEach(grid, function(row) {
-                    angular.forEach(row, function(cell) {
-                        if(cell.mine) {
+                angular.forEach(grid, function (row) {
+                    angular.forEach(row, function (cell) {
+                        if (cell.mine) {
                             found++;
                         }
                     });
                 });
 
                 expect(found).toBe(mineCount);
+            });
+
+            describe('and we know (0,0), (1,1) and (2,2) are mines', function () {
+                it('should increment the nearby values of adjacent cells appropriately', function () {
+                    // remember: grid[y][x]! These numbers were obtained for testing
+                    // the old fashioned way: pen and paper, drawing the grid. ;)
+                    expect(grid[0][0].nearby).toBe(1);
+                    expect(grid[1][0].nearby).toBe(2);
+                    expect(grid[2][0].nearby).toBe(1);
+                    expect(grid[0][1].nearby).toBe(2);
+                    expect(grid[1][1].nearby).toBe(2);
+                    expect(grid[2][1].nearby).toBe(2);
+                    expect(grid[0][2].nearby).toBe(1);
+                    expect(grid[1][2].nearby).toBe(2);
+                    expect(grid[2][2].nearby).toBe(2);
+                    expect(grid[3][0].nearby).toBe(0);
+                });
             });
         });
     });
