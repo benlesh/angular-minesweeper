@@ -15,3 +15,4 @@ checkout the various branches.
 1. Create a method to add a specified number mines to the grid at random
 2. We'll have to test to make sure that we're not going to add a mine to the same cell twice! This means we're going
 to have to inject `$window` as a dependency so we can mock `$window.Math.random()`.
+3. We'll need to add something to the template to display the mines in the cells.
