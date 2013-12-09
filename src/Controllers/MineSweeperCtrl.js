@@ -15,12 +15,17 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                             x: x,
                             y: y,
                             mine: false,
-                            nearby: 0
+                            nearby: 0,
+                            hidden: true
                         });
                     }
                     grid.push(row);
                 }
                 return grid;
+            };
+
+            $scope.reveal = function(cell) {
+                cell.hidden = false;
             };
 
             ctrl.addMines = function (grid, mineCount) {
