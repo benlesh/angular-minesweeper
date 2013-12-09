@@ -19,6 +19,10 @@
     cursor: pointer;
 }
 
+.cell.hidden:hover {
+    background: #eee;
+}
+
 .mine:after {
     font-family: Wingdings, sans-serif;
     content: "M";
