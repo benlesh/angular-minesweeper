@@ -237,11 +237,14 @@ describe('minesweeper MineSweeperCtrl', function () {
     });
 
     describe('$scope.resetGrid()', function () {
-        beforeEach(function (){
+        var originalStartTime;
+
+        beforeEach(function () {
             $scope.grid = null;
             $scope.gridWidth = 20;
             $scope.gridHeight = 20;
             $scope.mineCount = 21;
+            originalStartTime = $scope.startTime = new Date(2013, 0, 1);
 
             spyOn(mineSweeperCtrl, 'createGrid').andCallThrough();
             spyOn(mineSweeperCtrl, 'addMines').andCallThrough();
@@ -256,11 +259,16 @@ describe('minesweeper MineSweeperCtrl', function () {
         it('should call addMines()', function () {
             expect(mineSweeperCtrl.addMines).toHaveBeenCalledWith($scope.grid, 21);
         });
+
+        it('should update $scope.startTime', function () {
+            expect(+$scope.startTime).toBeGreaterThan(+originalStartTime);
+        });
     });
 
     describe('win()', function () {
         beforeEach(function () {
             $scope.wins = 3;
+            spyOn($scope, 'resetGrid');
             mineSweeperCtrl.win();
         });
 
@@ -271,11 +279,40 @@ describe('minesweeper MineSweeperCtrl', function () {
         it('should increment $scope.wins', function () {
             expect($scope.wins).toBe(4);
         });
+
+        it('should call $scope.resetGrid()', function () {
+            expect($scope.resetGrid).toHaveBeenCalled();
+        });
+
+        describe('when total time is less than $scope.bestTime', function () {
+            beforeEach(function () {
+                $scope.bestTime = 10000000; // ms
+                $scope.startTime = new Date();
+                mineSweeperCtrl.win();
+            });
+
+            it('should update $scope.bestTime', function () {
+                expect($scope.bestTime).toBeLessThan(10000000);
+            });
+        });
+
+        describe('when total time is greater than $scope.bestTime', function () {
+            beforeEach(function () {
+                $scope.bestTime = -1000; // negative time is my favorite!
+                $scope.startTime = new Date();
+                mineSweeperCtrl.win();
+            });
+
+            it('should not update $scope.bestTime', function () {
+                expect($scope.bestTime).toBe(-1000);
+            });
+        });
     });
 
     describe('lose()', function () {
-        beforeEach(function (){
+        beforeEach(function () {
             $scope.losses = 4;
+            spyOn($scope, 'resetGrid');
             mineSweeperCtrl.lose();
         });
 
@@ -283,8 +320,12 @@ describe('minesweeper MineSweeperCtrl', function () {
             expect(mockWindow.alert).toHaveBeenCalledWith('you lose!');
         });
 
-        it('should increment $scope.losses', function (){
+        it('should increment $scope.losses', function () {
             expect($scope.losses).toBe(5);
+        });
+
+        it('should call $scope.resetGrid()', function () {
+            expect($scope.resetGrid).toHaveBeenCalled();
         });
     });
 

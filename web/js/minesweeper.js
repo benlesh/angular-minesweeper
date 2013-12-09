@@ -28,11 +28,17 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             ctrl.lose = function () {
                 $window.alert('you lose!');
                 $scope.losses++;
+                $scope.resetGrid();
             };
 
             ctrl.win = function () {
                 $window.alert('you win!');
                 $scope.wins++;
+                var totalTime = (+new Date()) - $scope.startTime;
+                if(totalTime < $scope.bestTime) {
+                    $scope.bestTime = totalTime;
+                }
+                $scope.resetGrid();
             };
 
             $scope.reveal = function (cell) {
@@ -109,6 +115,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             $scope.resetGrid = function (){
                 $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
                 ctrl.addMines($scope.grid, $scope.mineCount);
+                $scope.startTime = +new Date();
             };
 
             $scope.gridWidth = 8;
@@ -116,7 +123,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             $scope.mineCount = 10;
             $scope.wins = 0;
             $scope.losses = 0;
-
+            $scope.bestTime = 15 * 60 * 1000; // 15 minutes in milliseconds
             $scope.resetGrid();
         }
     ]);
