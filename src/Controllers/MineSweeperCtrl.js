@@ -24,8 +24,15 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 return grid;
             };
 
+            ctrl.lose = function () {
+
+            };
+
             $scope.reveal = function(cell) {
                 cell.hidden = false;
+                if(cell.mine) {
+                    ctrl.lose();
+                }
             };
 
             ctrl.addMines = function (grid, mineCount) {

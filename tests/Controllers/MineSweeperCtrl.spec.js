@@ -180,21 +180,108 @@ describe('minesweeper MineSweeperCtrl', function () {
         });
     });
 
-    describe('$scope.reveal(cell)', function (){
-        var cell;
+    describe('hasWon()', function () {
+        var grid,
+            result;
 
-        beforeEach(function (){
-            cell = {
-                hidden: true
-            };
-            $scope.reveal(cell);
+        beforeEach(function () {
+            grid = mineSweeperCtrl.createGrid(10, 10);
+            mineSweeperCtrl.addMines($scope.grid, 4);
+            result = false;
         });
 
-        it('should set cell.hidden to false', function () {
-            expect(cell.hidden).toBe(false);
+        describe('when all non-mines are not hidden', function () {
+            beforeEach(function () {
+                angular.forEach(grid, function (row) {
+                    angular.forEach(row, function (cell) {
+                        if (!cell.mine) {
+                            cell.hidden = false;
+                        }
+                    });
+                });
+
+                result = mineSweeperCtrl.hasWon(grid);
+            });
+
+            it('should return true', function () {
+                expect(result).toBe(true);
+            });
+        });
+
+        describe('when one or more non-mines are still hidden', function (){
+            beforeEach(function (){
+                // reveal all cells that aren't mines.
+                angular.forEach(grid, function (row) {
+                    angular.forEach(row, function (cell) {
+                        if (!cell.mine) {
+                            cell.hidden = false;
+                        }
+                    });
+                });
+
+                // find a cell that's not a mine and set hide it again.
+                var cell;
+                while(!cell || cell.mine) {
+                    cell = mineSweeperCtrl.getRandomCell(grid);
+                }
+                cell.hidden = true;
+
+                result = mineSweeperCtrl.hasWon(grid);
+            });
+
+            it('should return false', function () {
+                expect(result).toBe(false);
+            });
         });
     });
 
+    describe('$scope.reveal(cell)', function () {
+        var cell;
+
+        describe('when the cell is just hidden', function () {
+            beforeEach(function () {
+                $scope.grid = mineSweeperCtrl.createGrid(10, 10);
+                cell = $scope.grid[3][3];
+                cell.hidden = true;
+                spyOn(mineSweeperCtrl, 'hasWon').andCallThrough();
+                $scope.reveal(cell);
+            });
+
+            it('should set cell.hidden to false', function () {
+                expect(cell.hidden).toBe(false);
+            });
+
+            it('should call hasWon($scope.grid)', function () {
+                expect(mineSweeperCtrl.hasWon).toHaveBeenCalledWith($scope.grid);
+            });
+        });
+
+        describe('when the cell has a mine', function () {
+            beforeEach(function () {
+                cell = {
+                    mine: true
+                };
+                spyOn(mineSweeperCtrl, 'lose').andCallThrough();
+                spyOn(mineSweeperCtrl, 'hasWon').andCallThrough();
+                $scope.reveal(cell);
+            });
+
+            it('should fire lose()', function () {
+                expect(mineSweeperCtrl.lose).toHaveBeenCalled();
+            });
+
+            it('should NOT fire hasWon($scope.grid)', function () {
+                expect(mineSweeperCtrl.hasWon).not.toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe('lose()', function () {
+        it('should exist', function () {
+            expect(typeof mineSweeperCtrl.lose).toBe('function');
+        });
+
+    });
     describe('createGrid(width, height)', function () {
         var grid,
             width,
