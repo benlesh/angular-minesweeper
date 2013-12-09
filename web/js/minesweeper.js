@@ -26,7 +26,11 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             };
 
             ctrl.lose = function () {
+                $window.alert('you lose!');
+            };
 
+            ctrl.win = function () {
+                $window.alert('you win!');
             };
 
             $scope.reveal = function (cell) {
@@ -35,7 +39,9 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                     ctrl.lose();
                     return;
                 }
-                ctrl.hasWon($scope.grid);
+                if (ctrl.hasWon($scope.grid)) {
+                    ctrl.win();
+                }
             };
 
             ctrl.hasWon = function (grid) {
@@ -44,7 +50,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                     row = grid[r];
                     for (c = 0; c < row.length; c++) {
                         cell = row[c];
-                        if(cell.hidden && !cell.mine) {
+                        if (cell.hidden && !cell.mine) {
                             return false;
                         }
                     }
