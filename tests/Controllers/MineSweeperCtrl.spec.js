@@ -236,6 +236,24 @@ describe('minesweeper MineSweeperCtrl', function () {
         });
     });
 
+    describe('$scope.resetGrid()', function () {
+        beforeEach(function (){
+            $scope.grid = null;
+            $scope.gridWidth = 20;
+            $scope.gridHeight = 20;
+            $scope.mineCount = 21;
+            $scope.resetGrid();
+        });
+
+        it('should call createGrid()', function () {
+            expect(mineSweeperCtrl.createGrid).toHaveBeenCalledWith(20, 20);
+        });
+
+        it('should call addMines()', function () {
+            expect(mineSweeperCtrl.addMines).toHaveBeenCalledWith($scope.grid, 21);
+        });
+    });
+
     describe('win()', function () {
         beforeEach(function () {
             mineSweeperCtrl.win();
