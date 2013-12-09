@@ -104,11 +104,15 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 }
             };
 
+            $scope.resetGrid = function (){
+                $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
+                ctrl.addMines($scope.grid, $scope.mineCount);
+            };
+
             $scope.gridWidth = 8;
             $scope.gridHeight = 8;
             $scope.mineCount = 10;
 
-            $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
-            ctrl.addMines($scope.grid, $scope.mineCount);
+            $scope.resetGrid();
         }
     ]);

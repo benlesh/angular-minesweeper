@@ -242,6 +242,10 @@ describe('minesweeper MineSweeperCtrl', function () {
             $scope.gridWidth = 20;
             $scope.gridHeight = 20;
             $scope.mineCount = 21;
+
+            spyOn(mineSweeperCtrl, 'createGrid').andCallThrough();
+            spyOn(mineSweeperCtrl, 'addMines').andCallThrough();
+
             $scope.resetGrid();
         });
 
