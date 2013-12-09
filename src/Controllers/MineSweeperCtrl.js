@@ -28,18 +28,34 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
 
             };
 
-            $scope.reveal = function(cell) {
+            $scope.reveal = function (cell) {
                 cell.hidden = false;
-                if(cell.mine) {
+                if (cell.mine) {
                     ctrl.lose();
+                    return;
                 }
+                ctrl.hasWon($scope.grid);
+            };
+
+            ctrl.hasWon = function (grid) {
+                var r, c, row, cell;
+                for (r = 0; r < grid.length; r++) {
+                    row = grid[r];
+                    for (c = 0; c < row.length; c++) {
+                        cell = row[c];
+                        if(cell.hidden && !cell.mine) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
             };
 
             ctrl.addMines = function (grid, mineCount) {
                 var laid = 0,
                     cell;
 
-                var incrementNearby = function(cell) {
+                var incrementNearby = function (cell) {
                     cell.nearby++;
                 };
 
