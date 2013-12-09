@@ -26,10 +26,12 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
 
             ctrl.lose = function () {
                 $window.alert('you lose!');
+                $scope.losses++;
             };
 
             ctrl.win = function () {
                 $window.alert('you win!');
+                $scope.wins++;
             };
 
             $scope.reveal = function (cell) {
@@ -111,6 +113,8 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             $scope.gridWidth = 8;
             $scope.gridHeight = 8;
             $scope.mineCount = 10;
+            $scope.wins = 0;
+            $scope.losses = 0;
 
             $scope.resetGrid();
         }

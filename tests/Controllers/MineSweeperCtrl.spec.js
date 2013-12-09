@@ -260,21 +260,31 @@ describe('minesweeper MineSweeperCtrl', function () {
 
     describe('win()', function () {
         beforeEach(function () {
+            $scope.wins = 3;
             mineSweeperCtrl.win();
         });
 
         it('should call $window.alert()', function () {
             expect(mockWindow.alert).toHaveBeenCalledWith('you win!');
         });
+
+        it('should increment $scope.wins', function () {
+            expect($scope.wins).toBe(4);
+        });
     });
 
     describe('lose()', function () {
         beforeEach(function (){
+            $scope.losses = 4;
             mineSweeperCtrl.lose();
         });
 
         it('should call $window.alert()', function () {
             expect(mockWindow.alert).toHaveBeenCalledWith('you lose!');
+        });
+
+        it('should increment $scope.losses', function (){
+            expect($scope.losses).toBe(5);
         });
     });
 
