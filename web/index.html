@@ -8,9 +8,10 @@
 <div ng-controller="MineSweeperCtrl">
     <div class="grid">
         <div class="row" ng-repeat="row in grid track by $index">
-            <div class="cell" ng-repeat="cell in row track by $index">
-                <span class="mine" ng-show="cell.mine"></span>
-                <span ng-show="!cell.mine && cell.nearby > 0" ng-bind="cell.nearby"></span>
+            <div class="cell" ng-repeat="cell in row track by $index"
+                    ng-class="{ hidden: cell.hidden }">
+                <span class="mine" ng-show="!cell.hidden && cell.mine"></span>
+                <span ng-show="!cell.hidden && !cell.mine && cell.nearby > 0" ng-bind="cell.nearby"></span>
             </div>
         </div>
     </div>
