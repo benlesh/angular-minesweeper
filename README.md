@@ -9,9 +9,3 @@ To view the various "steps" in development, (or at least the development in diff
 checkout the various branches.
 
 ----
-
-# Step 7: Add auto-reveal
-
-This functionality will be to reveal adjacent areas when the user clicks on a cell that doesn't border a mine.
-
-We'll reuse the `traverseNearbyCells` method to recursively reveal cells that don't border mines.
