@@ -5,13 +5,6 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             var ctrl = this,
                 Math = $window.Math;
 
-            /**
-             * returns an array of arrays with the outer array containing rows, and the inner array
-             * containing columns within those rows.
-             * @param width
-             * @param height
-             * @returns {Array}
-             */
             ctrl.createGrid = function (width, height) {
                 var grid = [],
                     row, x, y;

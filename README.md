@@ -9,3 +9,10 @@ To view the various "steps" in development, (or at least the development in diff
 checkout the various branches.
 
 ----
+
+#Step 4: click to reveal a cell
+
+Now will make it so we can click to reveal a cell. Well first thing is first, we'll need to hide the cell.
+
+1. Hide the cells
+2. Add an `ng-click` binding to reveal a cell when it's clicked.
