@@ -9,7 +9,8 @@
     <div class="grid">
         <div class="row" ng-repeat="row in grid track by $index">
             <div class="cell" ng-repeat="cell in row track by $index"
-                    ng-class="{ hidden: cell.hidden }">
+                    ng-class="{ hidden: cell.hidden }"
+                    ng-click="reveal(cell)">
                 <span class="mine" ng-show="!cell.hidden && cell.mine"></span>
                 <span ng-show="!cell.hidden && !cell.mine && cell.nearby > 0" ng-bind="cell.nearby"></span>
             </div>
