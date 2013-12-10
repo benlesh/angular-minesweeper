@@ -328,6 +328,26 @@ describe('minesweeper MineSweeperCtrl', function () {
             expect($scope.resetGrid).toHaveBeenCalled();
         });
     });
+
+    describe('$scope.startGame()', function () {
+        beforeEach(function () {
+            spyOn($scope, 'resetGrid').andCallThrough();
+            $scope.startGame();
+        });
+
+        it('should set $scope.showGrid to true', function () {
+            expect($scope.showGrid).toBe(true);
+        });
+
+        it('should set $scope.showStartForm to false', function () {
+            expect($scope.showStartForm).toBe(false);
+        });
+
+        it('should call $scope.resetGrid()', function () {
+            expect($scope.resetGrid).toHaveBeenCalled();
+        });
+    });
+
     describe('autoReveal(grid, cell)', function () {
         var grid, cell;
 

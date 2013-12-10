@@ -137,6 +137,13 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             $scope.wins = 0;
             $scope.losses = 0;
             $scope.bestTime = 15 * 60 * 1000; // 15 minutes in milliseconds
-            $scope.resetGrid();
+            $scope.showStartForm = true;
+            $scope.showGrid = false;
+
+            $scope.startGame = function (){
+                $scope.showStartForm = false;
+                $scope.showGrid = true;
+                $scope.resetGrid();
+            };
         }
     ]);
