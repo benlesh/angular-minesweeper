@@ -25,10 +25,12 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             };
 
             ctrl.lose = function () {
+                ctrl.revealAll($scope.grid);
                 $window.alert('you lose!');
             };
 
             ctrl.win = function () {
+                ctrl.revealAll($scope.grid);
                 $window.alert('you win!');
             };
 
@@ -43,18 +45,28 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 }
             };
 
+            ctrl.traverseGrid = function(grid, fn) {
+                angular.forEach(grid, function(row) {
+                    angular.forEach(row, function(cell) {
+                        fn(cell);
+                    });
+                });
+            };
+
+            ctrl.revealAll = function(grid) {
+                ctrl.traverseGrid(grid, function(cell) {
+                    cell.hidden = false;
+                });
+            };
+
             ctrl.hasWon = function (grid) {
-                var r, c, row, cell;
-                for (r = 0; r < grid.length; r++) {
-                    row = grid[r];
-                    for (c = 0; c < row.length; c++) {
-                        cell = row[c];
-                        if (cell.hidden && !cell.mine) {
-                            return false;
-                        }
+                var won = true;
+                ctrl.traverseGrid(grid, function(cell) {
+                    if(cell.hidden && !cell.mine) {
+                        won = false;
                     }
-                }
-                return true;
+                });
+                return won;
             };
 
             ctrl.addMines = function (grid, mineCount) {

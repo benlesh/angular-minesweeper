@@ -181,6 +181,56 @@ describe('minesweeper MineSweeperCtrl', function () {
         });
     });
 
+    describe('traverseGrid(grid)', function () {
+        var grid, traversalFn, count, cellsPassed;
+        beforeEach(function () {
+            cellsPassed = [];
+
+            traversalFn = function(cell) {
+                cellsPassed.push(cell);
+            };
+            grid = mineSweeperCtrl.createGrid(10, 10);
+            mineSweeperCtrl.traverseGrid(grid, traversalFn);
+        });
+
+        it('should call the traversalFn 100 times for a 10 x 10 grid', function () {
+            expect(cellsPassed.length).toBe(100);
+        });
+
+        it('should pass the cells to the traversal function', function () {
+            var y, x, i, cell;
+            i = 0;
+            for(y = 0; y < grid.length; y++) {
+                for(x = 0; x < grid[y].length; x++) {
+                    expect(cellsPassed[i++]).toBe(grid[y][x]);
+                }
+            }
+        });
+    });
+
+    describe('revealAll(grid)', function (){
+        var grid;
+
+        beforeEach(function (){
+            grid = mineSweeperCtrl.createGrid(5,5);
+            mineSweeperCtrl.traverseGrid(grid, function(cell) {
+                cell.hidden = true;
+            });
+
+            mineSweeperCtrl.revealAll(grid);
+        });
+
+        it('should set all cells to hidden === false', function () {
+            var allVisible = true;
+            mineSweeperCtrl.traverseGrid(grid, function(cell) {
+                if(cell.hidden) {
+                    allVisible = false;
+                }
+            });
+            expect(allVisible).toBe(true);
+        });
+    });
+
     describe('hasWon()', function () {
         var grid,
             result;
@@ -238,21 +288,33 @@ describe('minesweeper MineSweeperCtrl', function () {
 
     describe('win()', function () {
         beforeEach(function () {
+            $scope.grid = mineSweeperCtrl.createGrid(2,2);
+            spyOn(mineSweeperCtrl, 'revealAll');
             mineSweeperCtrl.win();
         });
 
         it('should call $window.alert()', function () {
             expect(mockWindow.alert).toHaveBeenCalledWith('you win!');
         });
+
+        it('should call revealAll($scope.grid)', function() {
+            expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
+        });
     });
 
     describe('lose()', function () {
-        beforeEach(function (){
+        beforeEach(function () {
+            $scope.grid = mineSweeperCtrl.createGrid(2,2);
+            spyOn(mineSweeperCtrl, 'revealAll');
             mineSweeperCtrl.lose();
         });
 
         it('should call $window.alert()', function () {
             expect(mockWindow.alert).toHaveBeenCalledWith('you lose!');
+        });
+
+        it('should call revealAll($scope.grid)', function() {
+            expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
         });
     });
 
