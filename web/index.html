@@ -18,7 +18,7 @@
                  ng-class="{ hidden: cell.hidden }"
                  ng-click="reveal(cell)"
                  right-click="cell.flag = !cell.flag">
-                <span class="flag" ng-show="cell.flag"></span>
+                <span class="flag" ng-show="cell.hidden && cell.flag"></span>
                 <span class="mine" ng-show="!cell.hidden && cell.mine"></span>
                 <span ng-show="!cell.hidden && !cell.mine && cell.nearby > 0" ng-bind="cell.nearby"
                       class="nearby-{{cell.nearby}}"></span>
