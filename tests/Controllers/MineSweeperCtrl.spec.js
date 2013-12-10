@@ -307,6 +307,7 @@ describe('minesweeper MineSweeperCtrl', function () {
             $scope.mineCount = 21;
             originalStartTime = $scope.startTime = new Date(2013, 0, 1);
 
+            spyOn(mineSweeperCtrl, 'getTime').andReturn(123456);
             spyOn(mineSweeperCtrl, 'createGrid').andCallThrough();
             spyOn(mineSweeperCtrl, 'addMines').andCallThrough();
 
@@ -322,7 +323,7 @@ describe('minesweeper MineSweeperCtrl', function () {
         });
 
         it('should update $scope.startTime', function () {
-            expect(+$scope.startTime).toBeGreaterThan(+originalStartTime);
+            expect(+$scope.startTime).toBe(123456);
         });
     });
 
@@ -378,13 +379,14 @@ describe('minesweeper MineSweeperCtrl', function () {
 
         describe('when total time is less than $scope.bestTime', function () {
             beforeEach(function () {
-                $scope.bestTime = 10000000; // ms
-                $scope.startTime = new Date();
+                spyOn(mineSweeperCtrl, 'getTime').andReturn(1234);
+                $scope.bestTime = 10000000;
+                $scope.startTime = 0;
                 mineSweeperCtrl.win();
             });
 
             it('should update $scope.bestTime', function () {
-                expect($scope.bestTime).toBeLessThan(10000000);
+                expect($scope.bestTime).toBe(1234);
             });
         });
 
@@ -658,6 +660,12 @@ describe('minesweeper MineSweeperCtrl', function () {
             for (i = 0; i < grid.length; i++) {
                 expect(grid[i].length).toBe(width);
             }
+        });
+    });
+
+    describe('getTime()', function () {
+        it('should get the current time', function () {
+            expect(mineSweeperCtrl.getTime()).toBe(+new Date());
         });
     });
 });
