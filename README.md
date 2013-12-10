@@ -9,3 +9,9 @@ To view the various "steps" in development, (or at least the development in diff
 checkout the various branches.
 
 ----
+
+#Step 9: Add "flagging" on right-click
+
+1. Add a right-click directive.
+2. Create an event to toggle a "flag" on the cell.
+3. Wire it up.
