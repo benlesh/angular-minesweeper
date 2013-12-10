@@ -38,7 +38,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             ctrl.win = function () {
                 ctrl.revealAll($scope.grid);
                 $scope.wins++;
-                var totalTime = (+new Date()) - $scope.startTime;
+                var totalTime = ctrl.getTime() - $scope.startTime;
                 if(totalTime < $scope.bestTime) {
                     $scope.bestTime = totalTime;
                 }
@@ -132,10 +132,14 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 }
             };
 
+            ctrl.getTime = function (){
+                return +new Date();
+            };
+
             $scope.resetGrid = function (){
                 $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
                 ctrl.addMines($scope.grid, $scope.mineCount);
-                $scope.startTime = +new Date();
+                $scope.startTime = ctrl.getTime();
             };
 
             $scope.gridWidth = 8;
