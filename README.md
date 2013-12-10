@@ -10,7 +10,7 @@ checkout the various branches.
 
 ----
 
-Step 8: Add a form to create a new game (Optional)
+#Step 8: Add a form to create a new game
 
 At this point the game is basically done, but what if you wanted to change the parameters a little before you start?
 
