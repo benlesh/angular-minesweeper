@@ -1,7 +1,7 @@
 angular.module('minesweeper').controller('MineSweeperCtrl',
     [
-        '$scope', '$window',
-        function ($scope, $window) {
+        '$scope', '$window', '$timeout',
+        function ($scope, $window, $timeout) {
             var ctrl = this,
                 Math = $window.Math;
 
@@ -26,11 +26,20 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
 
             ctrl.lose = function () {
                 ctrl.revealAll($scope.grid);
+                $timeout(ctrl.showLoss);
+            };
+
+            ctrl.showLoss = function () {
                 $window.alert('you lose!');
             };
 
             ctrl.win = function () {
                 ctrl.revealAll($scope.grid);
+                $timeout(ctrl.showWin);
+            };
+
+
+            ctrl.showWin = function () {
                 $window.alert('you win!');
             };
 

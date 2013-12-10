@@ -1,6 +1,7 @@
 describe('minesweeper MineSweeperCtrl', function () {
     var mineSweeperCtrl,
         mockWindow,
+        $timeout,
         $scope;
 
     beforeEach(function () {
@@ -10,6 +11,11 @@ describe('minesweeper MineSweeperCtrl', function () {
             var r = 0;
 
             $scope = $rootScope.$new();
+
+            $timeout = jasmine.createSpy('$timeout').andCallFake(function(fn, delay) {
+                window.setTimeout(fn, delay);
+                $scope.$apply();
+            });
 
             mockWindow = {
                 Math: {
@@ -23,7 +29,8 @@ describe('minesweeper MineSweeperCtrl', function () {
 
             mineSweeperCtrl = $controller('MineSweeperCtrl', {
                 $scope: $scope,
-                $window: mockWindow
+                $window: mockWindow,
+                $timeout: $timeout
             });
         });
     });
@@ -186,7 +193,7 @@ describe('minesweeper MineSweeperCtrl', function () {
         beforeEach(function () {
             cellsPassed = [];
 
-            traversalFn = function(cell) {
+            traversalFn = function (cell) {
                 cellsPassed.push(cell);
             };
             grid = mineSweeperCtrl.createGrid(10, 10);
@@ -200,20 +207,20 @@ describe('minesweeper MineSweeperCtrl', function () {
         it('should pass the cells to the traversal function', function () {
             var y, x, i, cell;
             i = 0;
-            for(y = 0; y < grid.length; y++) {
-                for(x = 0; x < grid[y].length; x++) {
+            for (y = 0; y < grid.length; y++) {
+                for (x = 0; x < grid[y].length; x++) {
                     expect(cellsPassed[i++]).toBe(grid[y][x]);
                 }
             }
         });
     });
 
-    describe('revealAll(grid)', function (){
+    describe('revealAll(grid)', function () {
         var grid;
 
-        beforeEach(function (){
-            grid = mineSweeperCtrl.createGrid(5,5);
-            mineSweeperCtrl.traverseGrid(grid, function(cell) {
+        beforeEach(function () {
+            grid = mineSweeperCtrl.createGrid(5, 5);
+            mineSweeperCtrl.traverseGrid(grid, function (cell) {
                 cell.hidden = true;
             });
 
@@ -222,8 +229,8 @@ describe('minesweeper MineSweeperCtrl', function () {
 
         it('should set all cells to hidden === false', function () {
             var allVisible = true;
-            mineSweeperCtrl.traverseGrid(grid, function(cell) {
-                if(cell.hidden) {
+            mineSweeperCtrl.traverseGrid(grid, function (cell) {
+                if (cell.hidden) {
                     allVisible = false;
                 }
             });
@@ -286,34 +293,55 @@ describe('minesweeper MineSweeperCtrl', function () {
         });
     });
 
+    describe('showWin()', function () {
+        beforeEach(function () {
+            mineSweeperCtrl.showWin();
+        });
+
+        it('should alert the user', function () {
+            expect(mockWindow.alert).toHaveBeenCalledWith('you win!');
+        });
+    });
+
+    describe('showLoss()', function () {
+        beforeEach(function () {
+            mineSweeperCtrl.showLoss();
+        });
+
+        it('should alert the user', function () {
+            expect(mockWindow.alert).toHaveBeenCalledWith('you lose!');
+        });
+    });
+
     describe('win()', function () {
         beforeEach(function () {
-            $scope.grid = mineSweeperCtrl.createGrid(2,2);
+            $scope.grid = mineSweeperCtrl.createGrid(2, 2);
             spyOn(mineSweeperCtrl, 'revealAll');
+            spyOn(mineSweeperCtrl, 'showWin');
             mineSweeperCtrl.win();
         });
 
-        it('should call $window.alert()', function () {
-            expect(mockWindow.alert).toHaveBeenCalledWith('you win!');
+        it('should call showWin() on a $timeout', function () {
+            expect($timeout).toHaveBeenCalledWith(mineSweeperCtrl.showWin);
         });
 
-        it('should call revealAll($scope.grid)', function() {
+        it('should call revealAll($scope.grid)', function () {
             expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
         });
     });
 
     describe('lose()', function () {
         beforeEach(function () {
-            $scope.grid = mineSweeperCtrl.createGrid(2,2);
+            $scope.grid = mineSweeperCtrl.createGrid(2, 2);
             spyOn(mineSweeperCtrl, 'revealAll');
             mineSweeperCtrl.lose();
         });
 
-        it('should call $window.alert()', function () {
-            expect(mockWindow.alert).toHaveBeenCalledWith('you lose!');
+        it('should call showLoss() on a $timeout', function () {
+            expect($timeout).toHaveBeenCalledWith(mineSweeperCtrl.showLoss);
         });
 
-        it('should call revealAll($scope.grid)', function() {
+        it('should call revealAll($scope.grid)', function () {
             expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
         });
     });
