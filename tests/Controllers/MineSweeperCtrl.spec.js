@@ -37,9 +37,12 @@ describe('minesweeper MineSweeperCtrl', function () {
             expect($scope.gridHeight).toBeGreaterThan(2);
         });
 
-        it('should set $scope.grid', function () {
-            expect(Object.prototype.toString.call($scope.grid)).toBe('[object Array]');
-            expect(Object.prototype.toString.call($scope.grid[0])).toBe('[object Array]');
+        it('should set $scope.showStartForm', function () {
+            expect($scope.showStartForm).toBe(true);
+        });
+
+        it('should set $scope.showGrid', function () {
+            expect($scope.showGrid).toBe(false);
         });
     });
 
@@ -186,7 +189,7 @@ describe('minesweeper MineSweeperCtrl', function () {
             result;
 
         beforeEach(function () {
-            grid = mineSweeperCtrl.createGrid(10, 10);
+            grid = $scope.grid = mineSweeperCtrl.createGrid(10, 10);
             mineSweeperCtrl.addMines($scope.grid, 4);
             result = false;
         });
