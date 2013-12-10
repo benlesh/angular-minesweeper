@@ -9,7 +9,8 @@
     <h4>Angular Minesweeper</h4>
     <p>Score: {{wins}} Wins - {{losses}} Losses</p>
     <p>Best Time: {{(bestTime / 1000) | number: 2}} seconds</p>
-    <div class="grid">
+    <button type="button" ng-show="showGrid" ng-click="newGame()">New Game</button>
+    <div ng-show="showGrid" class="grid">
         <div class="row" ng-repeat="row in grid track by $index">
             <div class="cell" ng-repeat="cell in row track by $index"
                     ng-class="{ hidden: cell.hidden }"
@@ -18,6 +19,29 @@
                 <span ng-show="!cell.hidden && !cell.mine && cell.nearby > 0" ng-bind="cell.nearby"></span>
             </div>
         </div>
+    </div>
+    <div ng-show="showStartForm">
+        <form name="startForm" ng-submit="startGame()">
+            <label>Grid Width <input type="number" name="gridWidth"
+                                     ng-model="gridWidth" min="2" required/></label>
+            <span ng-show="startForm.gridWidth.$error.required">required</span>
+            <span ng-show="startForm.gridWidth.$error.min">cannot be smaller than 2</span>
+
+
+            <label>Grid Height <input type="number" name="gridHeight"
+                                     ng-model="gridHeight" min="2" required/></label>
+            <span ng-show="startForm.gridHeight.$error.required">required</span>
+            <span ng-show="startForm.gridHeight.$error.min">cannot be smaller than 2</span>
+
+
+            <label># of Mines <input type="number" name="mineCount"
+                                      ng-model="mineCount" min="1" max="{{gridHeight * gridWidth - 1}}" required/></label>
+            <span ng-show="startForm.mineCount.$error.required">required</span>
+            <span ng-show="startForm.mineCount.$error.min">cannot be smaller than 1</span>
+            <span ng-show="startForm.mineCount.$error.max">cannot be greater than {{gridHeight * gridWidth - 1}}</span>
+
+            <button type="submit" ng-disabled="startForm.$invalid">Start Game</button>
+        </form>
     </div>
 </div>
 <script src="../bower_components/angular/angular.js"></script>

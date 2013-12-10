@@ -146,5 +146,10 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 $scope.showGrid = true;
                 $scope.resetGrid();
             };
+
+            $scope.newGame = function (){
+                $scope.showStartForm = true;
+                $scope.showGrid = false;
+            };
         }
     ]);
