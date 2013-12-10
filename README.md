@@ -10,7 +10,7 @@ checkout the various branches.
 
 ----
 
-Step 6: Score keeping (and resetting the game).
+#Step 6: Score keeping (and resetting the game).
 
 1. Have the game board reset after a win or a lose condition is met.
    a. Create a reset function: Refactor grid creation and adding of mines to be something that can be called within
