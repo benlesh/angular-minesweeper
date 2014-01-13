@@ -3,3 +3,7 @@ bower_components/
 _SpecRunner.html
 .grunt/
 .idea/
+
+# .net projects
+*.suo
+server/packages/

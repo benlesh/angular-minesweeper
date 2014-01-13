@@ -15,4 +15,4 @@ checkout the various branches.
 1. Add a "server" project in .NET. We're going to use .NET 4.0 and SignalR 1.* since that's aligns to what technologies
 we use here at Aesynt.
    - Add a MVC 4 project
-   - Use NuGet to add SignalR 1.*
+   - Use NuGet to add SignalR 1.1.4 (not 2, because we're using .NET 4.0 for now)
