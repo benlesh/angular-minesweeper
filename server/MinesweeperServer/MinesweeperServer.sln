@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinesweeperServer", "MinesweeperServer\MinesweeperServer.csproj", "{CAD4C52E-3D11-4239-B5D5-40364A51B9F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinesweeperServer.Tests", "MinesweeperServer.Tests\MinesweeperServer.Tests.csproj", "{92146F2A-789A-42D1-B2A9-9A9880A0862F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAD4C52E-3D11-4239-B5D5-40364A51B9F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD4C52E-3D11-4239-B5D5-40364A51B9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD4C52E-3D11-4239-B5D5-40364A51B9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD4C52E-3D11-4239-B5D5-40364A51B9F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92146F2A-789A-42D1-B2A9-9A9880A0862F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92146F2A-789A-42D1-B2A9-9A9880A0862F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92146F2A-789A-42D1-B2A9-9A9880A0862F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92146F2A-789A-42D1-B2A9-9A9880A0862F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
