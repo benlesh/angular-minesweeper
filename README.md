@@ -10,9 +10,13 @@ checkout the various branches.
 
 ----
 
-#Multiplayer with SignalR Step 1: Setting up the project
+#Multiplayer with SignalR Step 2: Getting things talking
 
-1. Add a "server" project in .NET. We're going to use .NET 4.0 and SignalR 1.* since that's aligns to what technologies
-we use here at Aesynt.
-   - Add a MVC 4 project
-   - Use NuGet to add SignalR 1.1.4 (not 2, because we're using .NET 4.0 for now)
+Okay, we have a lot of lifting to do to get these to applications talking...
+
+1. We need to create a SignalR Hub in .NET.
+2. We need to create the proper services in Angular to access SingalR and the Hub.
+   - Creating a signalR service.
+   - Create a service for the hub itself.
+   - Create a simple controller testing this (PingPongCtrl, which we'll remove/alter later)
+3. Let's send something like Ping! Pong! back and forth as a test.

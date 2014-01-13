@@ -34,6 +34,17 @@ module.exports = function(grunt) {
                 files: ['tests/**/*.spec.js'],
                 tasks: ['jshint', 'jasmine']
             }
+        },
+        copy: {
+            signalRServer: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['web/js/minesweeper.js'],
+                        dest: 'server/MinesweeperServer/MinesweeperServer/Scripts'
+                    }
+                ]
+            }
         }
     });
 
@@ -41,7 +52,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('default', ['concat', 'jshint', 'jasmine']);
+    grunt.registerTask('default', ['concat', 'jshint', 'jasmine', 'copy']);
     grunt.registerTask('dev', ['default', 'watch']);
 };
