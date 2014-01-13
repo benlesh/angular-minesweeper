@@ -16,12 +16,14 @@ namespace MinesweeperServer
         {
             AreaRegistration.RegisterAllAreas();
 
+            // THE ORDER HERE MATTERS!
+            // wire up SignalR
+            RouteTable.Routes.MapHubs();
+
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            // wire up SignalR
-            RouteTable.Routes.MapHubs();
         }
     }
 }
