@@ -11,7 +11,7 @@
         // set up events to monitor server pushes.
         hub.client.onServerMessage = function (message) {
             $rootScope.$apply(function () {
-                $rootScope.$broadcast('minesweeperServer:serverMessage', message);
+                $rootScope.$broadcast('minesweeper:serverMessage', message);
             });
         };
 
@@ -27,7 +27,7 @@
             minesweeperServer.ping();
         };
 
-        $scope.$on('minesweeperServer:serverMessage', function (e, msg) {
+        $scope.$on('minesweeper:serverMessage', function (e, msg) {
             $scope.serverMessage = msg;
         });
     } ]);
