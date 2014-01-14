@@ -10,13 +10,11 @@ checkout the various branches.
 
 ----
 
-#Multiplayer with SignalR Step 2: Getting things talking
+#Multiplayer with SignalR Step 3: Game Lobby. Part 1
 
-Okay, we have a lot of lifting to do to get these to applications talking...
+Now that we have things talking, let's create a way for players to get together. Eventually, we'll need to group players
+into groups to play against each other, but for now we just need to know who's connected.
 
-1. We need to create a SignalR Hub in .NET.
-2. We need to create the proper services in Angular to access SingalR and the Hub.
-   - Creating a signalR service.
-   - Create a service for the hub itself.
-   - Create a simple controller testing this (PingPongCtrl, which we'll remove/alter later)
-3. Let's send something like Ping! Pong! back and forth as a test.
+1. Handle connections to the hub to track connected users.
+2. Push updates to the connected list of users to the clients.
+3. Add a way to change the user's name in that list (so we know who's who)
