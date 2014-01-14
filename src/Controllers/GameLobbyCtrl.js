@@ -1,5 +1,19 @@
-angular.module('minesweeper').controller('GameLobbyCtrl', ['$scope', function($scope) {
-    $scope.$on('minesweeper:userList', function(e, userList) {
-        $scope.users = userList;
-    });
-}]);
+angular.module('minesweeper').controller('GameLobbyCtrl',
+    ['$scope', 'minesweeperServer',
+        function ($scope, minesweeperServer) {
+            var self = this;
+
+            self.userListHandler =  function (e, userList) {
+                $scope.users = userList;
+            };
+
+            $scope.$on('minesweeper:userList', self.userListHandler);
+
+            $scope.refreshUsers = function () {
+                minesweeperServer.sendUserList();
+            };
+
+            $scope.changeName = function (){
+                minesweeperServer.setName($scope.name);
+            };
+        }]);

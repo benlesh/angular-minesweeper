@@ -5,9 +5,14 @@
 </head>
     <body>
         <div ng-controller="GameLobbyCtrl">
+            <form name="nameForm" ng-submit="changeName()">
+                <label>Name <input type="text" name="name" ng-model="name" placeholder="Enter a name" required/></label>
+                <span ng-show="nameForm.name.$error.required">required</span>
+                <button ng-disabled="nameForm.$invalid">Change</button>
+            </form>
             <ul>
                 <li ng-repeat="user in users track by user.ConnectionId">
-                    {{user | json}}
+                    {{user.Name}}
                 </li>
             </ul>
         </div>

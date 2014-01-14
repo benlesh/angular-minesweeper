@@ -11,12 +11,15 @@ namespace MinesweeperServer.Tests
     {
         private MinesweeperHub _hub;
         private string _connectionId;
+        private Dictionary<string, MinesweeperUser> _userList;
 
         [SetUp]
         public void SetUp()
         {
             _connectionId = "ABCDEF123456";
             _hub = new TestableMinesweeperHub(_connectionId);
+            _userList = TestableMinesweeperHub.UserList;
+            _userList.Clear();
         }
 
         [Test]
@@ -28,14 +31,33 @@ namespace MinesweeperServer.Tests
         }
 
         [Test]
-        public void OnConnectedTest()
+        public void ConnectionTest()
         {
             _hub.Clients.All.onUserListCalledWith = null;
             _hub.OnConnected();
 
-            Assert.That(_hub.UserList.Count, Is.EqualTo(1));
-            Assert.That(_hub.UserList.Keys.First(), Is.EqualTo(_connectionId));
-            Assert.That(_hub.UserList.Values.First().Name, Is.EqualTo("Anonymous"));
+            Assert.That(_userList.Count, Is.EqualTo(1));
+            Assert.That(_userList.Keys.First(), Is.EqualTo(_connectionId));
+            Assert.That(_userList.Values.First().Name, Is.EqualTo("Anonymous"));
+
+            AssertClientOnUserListCalled();
+        }
+
+        [Test]
+        public void DisconnectionTest()
+        {
+            _hub.Clients.All.onUserListCalledWith = null;
+            _userList.Add(_connectionId, new MinesweeperUser
+                {
+                    ConnectionId = _connectionId,
+                    Name = "Connected User"
+                });
+
+            Assert.That(_userList.Count, Is.EqualTo(1));
+
+            _hub.OnDisconnected();
+
+            Assert.That(_userList.Count, Is.EqualTo(0));
 
             AssertClientOnUserListCalled();
         }
@@ -43,9 +65,8 @@ namespace MinesweeperServer.Tests
         [Test]
         public void SendUserListTest()
         {
-            _hub.UserList.Clear();
-            _hub.UserList.Add("1", new MinesweeperUser { ConnectionId = "1", Name = "One" });
-            _hub.UserList.Add("2", new MinesweeperUser { ConnectionId = "2", Name = "Two" });
+            _userList.Add("1", new MinesweeperUser { ConnectionId = "1", Name = "One" });
+            _userList.Add("2", new MinesweeperUser { ConnectionId = "2", Name = "Two" });
 
             _hub.SendUserList();
 
@@ -55,16 +76,16 @@ namespace MinesweeperServer.Tests
         [Test]
         public void SetNameTest()
         {
-            _hub.UserList.Add(_connectionId, new MinesweeperUser { ConnectionId = _connectionId, Name = "Old Name" });
+            TestableMinesweeperHub.UserList.Add(_connectionId, new MinesweeperUser { ConnectionId = _connectionId, Name = "Old Name" });
             _hub.SetName("Foobar Manchu");
 
-            Assert.That(_hub.UserList[_connectionId].Name, Is.EqualTo("Foobar Manchu"));
+            Assert.That(_userList[_connectionId].Name, Is.EqualTo("Foobar Manchu"));
             AssertClientOnUserListCalled();
         }
 
         private void AssertClientOnUserListCalled()
         {
-            Assert.That(_hub.Clients.All.onUserListCalledWith, Is.EquivalentTo(_hub.UserList.Values));
+            Assert.That(_hub.Clients.All.onUserListCalledWith, Is.EquivalentTo(_userList.Values));
         }
     }
 }

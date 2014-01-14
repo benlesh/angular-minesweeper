@@ -17,12 +17,13 @@ into groups to play against each other, but for now we just need to know who's c
 
 On the server:
 
-1. Override `OnConnected` on the hub and have it add to a UserList dictionary on the hub instance.
-2. Create a `SendUserList` method on the hub. This can be used to refresh user list data from the client, or it can be
+1. Override `OnConnected` on the hub and have it add to a static `UserList` dictionary on the hub.
+2. Override `OnDisconnected` on the hub to have it remove the user from the `UserList`.
+3. Create a `SendUserList` method on the hub. This can be used to refresh user list data from the client, or it can be
 used from other code in the Hub to push the list back to the client.
-3. Have `OnConnected` call `SendUserList`.
-4. Create a `SetName(name)` method on the hub the user can use to update their name.
-5. Have `SetName` call `SendUserList`
+4. Have `OnConnected` call `SendUserList`.
+5. Create a `SetName(name)` method on the hub the user can use to update their name.
+6. Have `SetName` call `SendUserList`
 
 On the client:
 
@@ -35,5 +36,6 @@ game lobby.
    - Create a method on the service `setName` to call `hub.server.setName()`.
 5. Handle the `minesweeper:userList` event in the `GameLobbleCtrl` and add the returned list to the `$scope`.
 6. Display the list of users in your view with an `ng-repeat`.
+7. Add a simple form to update your name.
 
 

@@ -1,5 +1,6 @@
 ﻿(function (angular) {
-    var app = angular.module('minesweeper-signalr', []);
+    'use strict';
+    var app = angular.module('minesweeper-signalr', ['minesweeper']);
 
     app.factory('minesweeperServer', ['$window', '$rootScope', function ($window, $rootScope) {
         var conn = $window.$.connection,
@@ -31,7 +32,7 @@
             sendUserList: function () {
                 hub.server.sendUserList();
             }
-        }
+        };
     } ]);
 
 } (window.angular));

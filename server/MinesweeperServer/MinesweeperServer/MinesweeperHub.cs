@@ -8,7 +8,7 @@ namespace MinesweeperServer
 {
     public class MinesweeperHub : Hub
     {
-        public readonly Dictionary<string, MinesweeperUser> UserList = new Dictionary<string, MinesweeperUser>(); 
+        public static readonly Dictionary<string, MinesweeperUser> UserList = new Dictionary<string, MinesweeperUser>();
 
         public void Ping()
         {
@@ -24,6 +24,16 @@ namespace MinesweeperServer
                 });
             SendUserList();
             return base.OnConnected();
+        }
+
+        public override System.Threading.Tasks.Task OnDisconnected()
+        {
+            if (UserList.ContainsKey(Context.ConnectionId))
+            {
+                UserList.Remove(Context.ConnectionId);
+            }
+            SendUserList();
+            return base.OnDisconnected();
         }
 
         public void SendUserList()
