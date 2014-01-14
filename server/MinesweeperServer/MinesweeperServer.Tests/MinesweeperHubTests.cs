@@ -22,7 +22,7 @@ namespace MinesweeperServer.Tests
         {
             _hub.Ping();
             Assert.That(_hub.Clients.All.onServerMessageCalledWith, Is.EqualTo("Pong!"));
-            Assert.That(_hub.Clients.All.onServerMessageCallCount, Is.EqualTo(0));
+            Assert.That(_hub.Clients.All.onServerMessageCallCount, Is.EqualTo(1));
         }
     }
 }
