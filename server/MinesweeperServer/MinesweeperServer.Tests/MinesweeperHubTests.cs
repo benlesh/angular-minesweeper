@@ -30,10 +30,14 @@ namespace MinesweeperServer.Tests
         [Test]
         public void OnConnectedTest()
         {
+            _hub.Clients.All.onUserListCalledWith = null;
             _hub.OnConnected();
+
             Assert.That(_hub.UserList.Count, Is.EqualTo(1));
             Assert.That(_hub.UserList.Keys.First(), Is.EqualTo(_connectionId));
             Assert.That(_hub.UserList.Values.First().Name, Is.EqualTo("Anonymous"));
+
+            AssertClientOnUserListCalled();
         }
 
         [Test]
@@ -45,6 +49,11 @@ namespace MinesweeperServer.Tests
             
             _hub.SendUserList();
 
+            AssertClientOnUserListCalled();
+        }
+
+        private void AssertClientOnUserListCalled()
+        {
             Assert.That(_hub.Clients.All.onUserListCalledWith, Is.EquivalentTo(_hub.UserList.Values));
         }
     }

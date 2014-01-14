@@ -22,13 +22,13 @@ namespace MinesweeperServer
                     ConnectionId = Context.ConnectionId,
                     Name = "Anonymous"
                 });
+            SendUserList();
             return base.OnConnected();
         }
 
         public void SendUserList()
         {
-            var userList = UserList.Values.ToArray();
-            Clients.All.onUserList(userList);
+            Clients.All.onUserList(UserList.Values);
         }
     }
 }
