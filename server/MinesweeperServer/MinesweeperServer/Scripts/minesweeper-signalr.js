@@ -15,21 +15,23 @@
             });
         };
 
+        hub.client.onUserList = function (userList) {
+            $rootScope.$apply(function () {
+                $rootScope.$broadcast('minesweeper:userList', userList);
+            });
+        };
+
         return {
             ping: function () {
                 hub.server.ping();
+            },
+            setName: function (name) {
+                hub.server.setName(name);
+            },
+            sendUserList: function () {
+                hub.server.sendUserList();
             }
         }
-    } ]);
-
-    app.controller('PingPongCtrl', ['$scope', 'minesweeperServer', function ($scope, minesweeperServer) {
-        $scope.ping = function () {
-            minesweeperServer.ping();
-        };
-
-        $scope.$on('minesweeper:serverMessage', function (e, msg) {
-            $scope.serverMessage = msg;
-        });
     } ]);
 
 } (window.angular));

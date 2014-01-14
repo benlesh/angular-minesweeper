@@ -3,15 +3,18 @@
 <head>
     <title></title>
 </head>
-<body>
-    <div ng-controller="PingPongCtrl">
-        <button type="button" ng-click="ping()">Ping!</button> {{serverMessage}}
-    </div>
-    
-    <script src="Scripts/jquery-1.10.2.min.js"></script>
-    <script src="Scripts/jquery.signalR-1.1.4.min.js"></script>
-    <script src="Scripts/angular.min.js"></script>
-    <script src="signalr/hubs"></script>
-    <script src="Scripts/minesweeper-signalr.js"></script>
-</body>
+    <body>
+        <div ng-controller="GameLobbyCtrl">
+            <ul>
+                <li ng-repeat="user in users track by user.ConnectionId">
+                    {{user | json}}
+                </li>
+            </ul>
+        </div>
+        <script src="Scripts/jquery-1.10.2.min.js"></script>
+        <script src="Scripts/jquery.signalR-1.1.4.min.js"></script>
+        <script src="Scripts/angular.min.js"></script>
+        <script src="signalr/hubs"></script>
+        <script src="Scripts/minesweeper-signalr.js"></script>
+    </body>
 </html>
