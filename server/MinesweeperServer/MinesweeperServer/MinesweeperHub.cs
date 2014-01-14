@@ -24,11 +24,11 @@ namespace MinesweeperServer
                 });
             return base.OnConnected();
         }
-    }
 
-    public class MinesweeperUser
-    {
-        public string ConnectionId { get; set; }
-        public string Name { get; set; }
+        public void SendUserList()
+        {
+            var userList = UserList.Values.ToArray();
+            Clients.All.onUserList(userList);
+        }
     }
 }

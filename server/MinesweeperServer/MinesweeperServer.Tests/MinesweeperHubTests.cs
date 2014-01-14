@@ -35,5 +35,17 @@ namespace MinesweeperServer.Tests
             Assert.That(_hub.UserList.Keys.First(), Is.EqualTo(_connectionId));
             Assert.That(_hub.UserList.Values.First().Name, Is.EqualTo("Anonymous"));
         }
+
+        [Test]
+        public void SendUserListTest()
+        {
+            _hub.UserList.Clear();
+            _hub.UserList.Add("1", new MinesweeperUser {ConnectionId = "1", Name = "One"});
+            _hub.UserList.Add("2", new MinesweeperUser {ConnectionId = "2", Name = "Two"});
+            
+            _hub.SendUserList();
+
+            Assert.That(_hub.Clients.All.onUserListCalledWith, Is.EquivalentTo(_hub.UserList.Values));
+        }
     }
 }
