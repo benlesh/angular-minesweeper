@@ -25,24 +25,4 @@ namespace MinesweeperServer.Tests
             Assert.That(_hub.Clients.All.onServerMessageCallCount, Is.EqualTo(0));
         }
     }
-
-    public class MockClientsAll
-    {
-        public string onServerMessageCalledWith;
-        public int onServerMessageCallCount = 0;
-
-        public void onServerMessage(string message)
-        {
-            onServerMessageCalledWith = message;
-            onServerMessageCallCount++;
-        }
-    }
-
-    public class TestableMinesweeperHub : MinesweeperHub
-    {
-        public TestableMinesweeperHub()
-        {
-            Clients.All = new MockClientsAll();
-        }
-    }
 }
