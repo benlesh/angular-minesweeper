@@ -30,5 +30,16 @@ namespace MinesweeperServer
         {
             Clients.All.onUserList(UserList.Values);
         }
+
+        public void SetName(string name)
+        {
+            var connectionId = Context.ConnectionId;
+            MinesweeperUser user;
+            if (UserList.TryGetValue(connectionId, out user))
+            {
+                user.Name = name;
+                SendUserList();
+            }
+        }
     }
 }

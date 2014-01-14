@@ -44,11 +44,21 @@ namespace MinesweeperServer.Tests
         public void SendUserListTest()
         {
             _hub.UserList.Clear();
-            _hub.UserList.Add("1", new MinesweeperUser {ConnectionId = "1", Name = "One"});
-            _hub.UserList.Add("2", new MinesweeperUser {ConnectionId = "2", Name = "Two"});
-            
+            _hub.UserList.Add("1", new MinesweeperUser { ConnectionId = "1", Name = "One" });
+            _hub.UserList.Add("2", new MinesweeperUser { ConnectionId = "2", Name = "Two" });
+
             _hub.SendUserList();
 
+            AssertClientOnUserListCalled();
+        }
+
+        [Test]
+        public void SetNameTest()
+        {
+            _hub.UserList.Add(_connectionId, new MinesweeperUser { ConnectionId = _connectionId, Name = "Old Name" });
+            _hub.SetName("Foobar Manchu");
+
+            Assert.That(_hub.UserList[_connectionId].Name, Is.EqualTo("Foobar Manchu"));
             AssertClientOnUserListCalled();
         }
 
