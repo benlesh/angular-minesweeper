@@ -1,18 +1,28 @@
 {
   "name": "angular-minesweeper",
   "version": "0.0.0",
-  "description": "",
+  "description": "angular-minesweeper.js\r ===========================",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "MIT",
+  "license": "BSD-2-Clause",
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-jasmine": "~0.5.2",
     "grunt-contrib-jshint": "~0.7.2"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blesh/angular-minesweeper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/blesh/angular-minesweeper/issues"
   }
 }

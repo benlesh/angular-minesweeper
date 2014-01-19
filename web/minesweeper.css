@@ -1,0 +1,70 @@
+.row {
+    clear: both;
+    margin: 0;
+    padding: 0;
+}
+
+.cell {
+    float: left;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin: 1px;
+}
+
+.cell.hidden {
+    background: #ccc;
+    cursor: pointer;
+}
+
+.cell.hidden:hover {
+    background: #eee;
+}
+
+.nearby-1 {
+    color: blue;
+}
+
+.nearby-2 {
+    color: green;
+}
+
+.nearby-3 {
+    color: red;
+}
+
+.nearby-4 {
+    color: darkblue;
+}
+
+.nearby-5 {
+    color: darkred;
+}
+
+.nearby-6 {
+    color: teal;
+}
+
+.nearby-7 {
+    color: black;
+}
+
+.nearby-8 {
+    color: darkgray;
+}
+
+.mine:after {
+    font-family: Wingdings, sans-serif;
+    content: "M";
+}
+
+.flag {
+    color: red;
+}
+
+.flag:after {
+    font-family: Wingdings, sans-serif;
+    content: "P";
+}

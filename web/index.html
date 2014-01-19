@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app="minesweeper">
+<head>
+    <title>Mine Sweeper in Angular</title>
+    <link rel="stylesheet" href="minesweeper.css"/>
+</head>
+<body>
+<div ng-controller="MineSweeperCtrl">
+    <h4>Angular Minesweeper</h4>
+
+    <p>Score: {{wins}} Wins - {{losses}} Losses</p>
+
+    <p>Best Time: {{(bestTime / 1000) | number: 2}} seconds</p>
+    <button type="button" ng-show="showGrid" ng-click="newGame()">New Game</button>
+    <div ng-show="showGrid" class="grid">
+        <div class="row" ng-repeat="row in grid track by $index">
+            <div class="cell" ng-repeat="cell in row track by $index"
+                 ng-class="{ hidden: cell.hidden }"
+                 ng-click="reveal(cell)"
+                 right-click="cell.flag = !cell.flag">
+                <span class="flag" ng-show="cell.hidden && cell.flag"></span>
+                <span class="mine" ng-show="!cell.hidden && cell.mine"></span>
+                <span ng-show="!cell.hidden && !cell.mine && cell.nearby > 0" ng-bind="cell.nearby"
+                      class="nearby-{{cell.nearby}}"></span>
+            </div>
+        </div>
+    </div>
+    <div ng-show="showStartForm">
+        <form name="startForm" ng-submit="startGame()">
+            <label>Grid Width <input type="number" name="gridWidth"
+                                     ng-model="gridWidth" min="2" required/></label>
+            <span ng-show="startForm.gridWidth.$error.required">required</span>
+            <span ng-show="startForm.gridWidth.$error.min">cannot be smaller than 2</span>
+
+
+            <label>Grid Height <input type="number" name="gridHeight"
+                                      ng-model="gridHeight" min="2" required/></label>
+            <span ng-show="startForm.gridHeight.$error.required">required</span>
+            <span ng-show="startForm.gridHeight.$error.min">cannot be smaller than 2</span>
+
+
+            <label># of Mines
+                <input type="number" name="mineCount"
+                       ng-model="mineCount" min="1" max="{{gridHeight * gridWidth - 1}}" required/></label>
+            <span ng-show="startForm.mineCount.$error.required">required</span>
+            <span ng-show="startForm.mineCount.$error.min">cannot be smaller than 1</span>
+            <span ng-show="startForm.mineCount.$error.max">cannot be greater than {{gridHeight * gridWidth - 1}}</span>
+
+            <button type="submit" ng-disabled="startForm.$invalid">Start Game</button>
+        </form>
+    </div>
+</div>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="js/minesweeper.js"></script>
+</body>
+</html>
