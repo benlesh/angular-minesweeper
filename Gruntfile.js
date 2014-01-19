@@ -4,12 +4,12 @@ module.exports = function(grunt) {
     grunt.initConfig({
         concat: {
             final: {
-                src: ['src/**/*.js'],
+                src: ['src/minesweeper.js', 'src/**/*.js'],
                 dest: 'web/js/minesweeper.js'
             }
         },
         jshint: {
-            all: ['Gruntfile.js', 'tests/**/*.js', 'web/js/minsweeper.js']
+            all: ['Gruntfile.js', 'tests/**/*.js', 'web/js/minesweeper.js']
         },
         jasmine: {
             all: {

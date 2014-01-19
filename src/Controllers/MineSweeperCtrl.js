@@ -1,4 +1,3 @@
-angular.module('minesweeper', []);
 angular.module('minesweeper').controller('MineSweeperCtrl',
     [
         '$scope',
