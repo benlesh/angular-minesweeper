@@ -1,7 +1,7 @@
 angular.module('minesweeper').controller('MineSweeperCtrl',
     [
-        '$scope', '$window',
-        function ($scope, $window) {
+        '$scope', '$window', '$timeout',
+        function ($scope, $window, $timeout) {
             var ctrl = this,
                 Math = $window.Math;
 
@@ -24,15 +24,65 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 return grid;
             };
 
-            $scope.reveal = function(cell) {
+            ctrl.lose = function () {
+                ctrl.revealAll($scope.grid);
+                $timeout(ctrl.showLoss);
+            };
+
+            ctrl.showLoss = function () {
+                $window.alert('you lose!');
+            };
+
+            ctrl.win = function () {
+                ctrl.revealAll($scope.grid);
+                $timeout(ctrl.showWin);
+            };
+
+
+            ctrl.showWin = function () {
+                $window.alert('you win!');
+            };
+
+            $scope.reveal = function (cell) {
                 cell.hidden = false;
+                if (cell.mine) {
+                    ctrl.lose();
+                    return;
+                }
+                if (ctrl.hasWon($scope.grid)) {
+                    ctrl.win();
+                }
+            };
+
+            ctrl.traverseGrid = function(grid, fn) {
+                angular.forEach(grid, function(row) {
+                    angular.forEach(row, function(cell) {
+                        fn(cell);
+                    });
+                });
+            };
+
+            ctrl.revealAll = function(grid) {
+                ctrl.traverseGrid(grid, function(cell) {
+                    cell.hidden = false;
+                });
+            };
+
+            ctrl.hasWon = function (grid) {
+                var won = true;
+                ctrl.traverseGrid(grid, function(cell) {
+                    if(cell.hidden && !cell.mine) {
+                        won = false;
+                    }
+                });
+                return won;
             };
 
             ctrl.addMines = function (grid, mineCount) {
                 var laid = 0,
                     cell;
 
-                var incrementNearby = function(cell) {
+                var incrementNearby = function (cell) {
                     cell.nearby++;
                 };
 

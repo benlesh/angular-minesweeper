@@ -10,9 +10,11 @@ checkout the various branches.
 
 ----
 
-#Step 4: click to reveal a cell
+# Step 5 - Add some game logic
 
-Now will make it so we can click to reveal a cell. Well first thing is first, we'll need to hide the cell.
-
-1. Hide the cells
-2. Add an `ng-click` binding to reveal a cell when it's clicked.
+1. End the game if the user clicks a mine.
+   a. Add a check in the click event to see if the cell clicked is a mine.
+   b. If the user clicks a mine, the user loses.
+2. End the game if the user clicks everything BUT the mines.
+   a. Add a check in the click to see if there is nothing left hidden but mines.
+   b. If only mines are left, then the user wins.

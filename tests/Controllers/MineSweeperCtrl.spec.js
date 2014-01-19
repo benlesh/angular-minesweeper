@@ -1,6 +1,7 @@
 describe('minesweeper MineSweeperCtrl', function () {
     var mineSweeperCtrl,
         mockWindow,
+        $timeout,
         $scope;
 
     beforeEach(function () {
@@ -11,18 +12,25 @@ describe('minesweeper MineSweeperCtrl', function () {
 
             $scope = $rootScope.$new();
 
+            $timeout = jasmine.createSpy('$timeout').andCallFake(function(fn, delay) {
+                window.setTimeout(fn, delay);
+                $scope.$apply();
+            });
+
             mockWindow = {
                 Math: {
                     random: Math.random,
                     floor: Math.floor,
                     min: Math.min,
                     max: Math.max
-                }
+                },
+                alert: jasmine.createSpy('$window.alert')
             };
 
             mineSweeperCtrl = $controller('MineSweeperCtrl', {
                 $scope: $scope,
-                $window: mockWindow
+                $window: mockWindow,
+                $timeout: $timeout
             });
         });
     });
@@ -180,21 +188,225 @@ describe('minesweeper MineSweeperCtrl', function () {
         });
     });
 
-    describe('$scope.reveal(cell)', function (){
-        var cell;
+    describe('traverseGrid(grid)', function () {
+        var grid, traversalFn, count, cellsPassed;
+        beforeEach(function () {
+            cellsPassed = [];
 
-        beforeEach(function (){
-            cell = {
-                hidden: true
+            traversalFn = function (cell) {
+                cellsPassed.push(cell);
             };
-            $scope.reveal(cell);
+            grid = mineSweeperCtrl.createGrid(10, 10);
+            mineSweeperCtrl.traverseGrid(grid, traversalFn);
         });
 
-        it('should set cell.hidden to false', function () {
-            expect(cell.hidden).toBe(false);
+        it('should call the traversalFn 100 times for a 10 x 10 grid', function () {
+            expect(cellsPassed.length).toBe(100);
+        });
+
+        it('should pass the cells to the traversal function', function () {
+            var y, x, i, cell;
+            i = 0;
+            for (y = 0; y < grid.length; y++) {
+                for (x = 0; x < grid[y].length; x++) {
+                    expect(cellsPassed[i++]).toBe(grid[y][x]);
+                }
+            }
         });
     });
 
+    describe('revealAll(grid)', function () {
+        var grid;
+
+        beforeEach(function () {
+            grid = mineSweeperCtrl.createGrid(5, 5);
+            mineSweeperCtrl.traverseGrid(grid, function (cell) {
+                cell.hidden = true;
+            });
+
+            mineSweeperCtrl.revealAll(grid);
+        });
+
+        it('should set all cells to hidden === false', function () {
+            var allVisible = true;
+            mineSweeperCtrl.traverseGrid(grid, function (cell) {
+                if (cell.hidden) {
+                    allVisible = false;
+                }
+            });
+            expect(allVisible).toBe(true);
+        });
+    });
+
+    describe('hasWon()', function () {
+        var grid,
+            result;
+
+        beforeEach(function () {
+            grid = mineSweeperCtrl.createGrid(10, 10);
+            mineSweeperCtrl.addMines($scope.grid, 4);
+            result = false;
+        });
+
+        describe('when all non-mines are not hidden', function () {
+            beforeEach(function () {
+                angular.forEach(grid, function (row) {
+                    angular.forEach(row, function (cell) {
+                        if (!cell.mine) {
+                            cell.hidden = false;
+                        }
+                    });
+                });
+
+                result = mineSweeperCtrl.hasWon(grid);
+            });
+
+            it('should return true', function () {
+                expect(result).toBe(true);
+            });
+        });
+
+        describe('when one or more non-mines are still hidden', function () {
+            beforeEach(function () {
+                // reveal all cells that aren't mines.
+                angular.forEach(grid, function (row) {
+                    angular.forEach(row, function (cell) {
+                        if (!cell.mine) {
+                            cell.hidden = false;
+                        }
+                    });
+                });
+
+                // find a cell that's not a mine and set hide it again.
+                var cell;
+                while (!cell || cell.mine) {
+                    cell = mineSweeperCtrl.getRandomCell(grid);
+                }
+                cell.hidden = true;
+
+                result = mineSweeperCtrl.hasWon(grid);
+            });
+
+            it('should return false', function () {
+                expect(result).toBe(false);
+            });
+        });
+    });
+
+    describe('showWin()', function () {
+        beforeEach(function () {
+            mineSweeperCtrl.showWin();
+        });
+
+        it('should alert the user', function () {
+            expect(mockWindow.alert).toHaveBeenCalledWith('you win!');
+        });
+    });
+
+    describe('showLoss()', function () {
+        beforeEach(function () {
+            mineSweeperCtrl.showLoss();
+        });
+
+        it('should alert the user', function () {
+            expect(mockWindow.alert).toHaveBeenCalledWith('you lose!');
+        });
+    });
+
+    describe('win()', function () {
+        beforeEach(function () {
+            $scope.grid = mineSweeperCtrl.createGrid(2, 2);
+            spyOn(mineSweeperCtrl, 'revealAll');
+            spyOn(mineSweeperCtrl, 'showWin');
+            mineSweeperCtrl.win();
+        });
+
+        it('should call showWin() on a $timeout', function () {
+            expect($timeout).toHaveBeenCalledWith(mineSweeperCtrl.showWin);
+        });
+
+        it('should call revealAll($scope.grid)', function () {
+            expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
+        });
+    });
+
+    describe('lose()', function () {
+        beforeEach(function () {
+            $scope.grid = mineSweeperCtrl.createGrid(2, 2);
+            spyOn(mineSweeperCtrl, 'revealAll');
+            mineSweeperCtrl.lose();
+        });
+
+        it('should call showLoss() on a $timeout', function () {
+            expect($timeout).toHaveBeenCalledWith(mineSweeperCtrl.showLoss);
+        });
+
+        it('should call revealAll($scope.grid)', function () {
+            expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
+        });
+    });
+
+    describe('$scope.reveal(cell)', function () {
+        var cell;
+
+        describe('when the cell is just hidden', function () {
+            beforeEach(function () {
+                $scope.grid = mineSweeperCtrl.createGrid(10, 10);
+                cell = $scope.grid[3][3];
+                cell.hidden = true;
+                spyOn(mineSweeperCtrl, 'hasWon').andCallThrough();
+                $scope.reveal(cell);
+            });
+
+            it('should set cell.hidden to false', function () {
+                expect(cell.hidden).toBe(false);
+            });
+
+            it('should call hasWon($scope.grid)', function () {
+                expect(mineSweeperCtrl.hasWon).toHaveBeenCalledWith($scope.grid);
+            });
+        });
+
+        describe('when hasWon() returns true', function () {
+            beforeEach(function () {
+                $scope.grid = mineSweeperCtrl.createGrid(10, 10);
+                cell = $scope.grid[0][0];
+                spyOn(mineSweeperCtrl, 'hasWon').andReturn(true);
+                spyOn(mineSweeperCtrl, 'win');
+                $scope.reveal(cell);
+            });
+
+            it('should call win()', function () {
+                expect(mineSweeperCtrl.win).toHaveBeenCalled();
+            });
+        });
+
+        describe('when the cell has a mine', function () {
+            beforeEach(function () {
+                cell = {
+                    mine: true
+                };
+                spyOn(mineSweeperCtrl, 'lose').andCallThrough();
+                spyOn(mineSweeperCtrl, 'hasWon').andCallThrough();
+                $scope.reveal(cell);
+            });
+
+            it('should fire lose()', function () {
+                expect(mineSweeperCtrl.lose).toHaveBeenCalled();
+            });
+
+            it('should NOT fire hasWon($scope.grid)', function () {
+                expect(mineSweeperCtrl.hasWon).not.toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe('lose()', function () {
+        it('should exist', function () {
+            expect(typeof mineSweeperCtrl.lose).toBe('function');
+        });
+
+    });
     describe('createGrid(width, height)', function () {
         var grid,
             width,

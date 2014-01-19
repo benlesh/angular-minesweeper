@@ -12,7 +12,8 @@
                     ng-class="{ hidden: cell.hidden }"
                     ng-click="reveal(cell)">
                 <span class="mine" ng-show="!cell.hidden && cell.mine"></span>
-                <span ng-show="!cell.hidden && !cell.mine && cell.nearby > 0" ng-bind="cell.nearby" class="nearby-{{cell.nearby}}"></span>
+                <span ng-show="!cell.hidden && !cell.mine && cell.nearby > 0" ng-bind="cell.nearby"
+                      class="nearby-{{cell.nearby}}"></span>
             </div>
         </div>
     </div>
