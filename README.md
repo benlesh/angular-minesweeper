@@ -9,8 +9,10 @@ To view the various "steps" in development, (or at least the development in diff
 checkout the various branches.
 
 ----
-# Step 7: Add auto-reveal
 
-This functionality will be to reveal adjacent areas when the user clicks on a cell that doesn't border a mine.
+#Step 8: Add a form to create a new game
 
-We'll reuse the `traverseNearbyCells` method to recursively reveal cells that don't border mines.
+1. Hide the grid until a game is started.
+2. Add a form to update the game parameters.
+3. Add some validation to the form.
+4. Wire it up with a start button (submit)
