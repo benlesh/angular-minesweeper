@@ -6,13 +6,6 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
             var ctrl = this,
                 Math = $window.Math;
 
-            /**
-             * returns an array of arrays with the outer array containing rows, and the inner array
-             * containing columns within those rows.
-             * @param width
-             * @param height
-             * @returns {Array}
-             */
             ctrl.createGrid = function (width, height) {
                 var grid = [],
                     row, x, y;
@@ -23,12 +16,17 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                             x: x,
                             y: y,
                             mine: false,
-                            nearby: 0
+                            nearby: 0,
+                            hidden: true
                         });
                     }
                     grid.push(row);
                 }
                 return grid;
+            };
+
+            $scope.reveal = function(cell) {
+                cell.hidden = false;
             };
 
             ctrl.addMines = function (grid, mineCount) {

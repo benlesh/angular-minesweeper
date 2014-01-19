@@ -180,6 +180,21 @@ describe('minesweeper MineSweeperCtrl', function () {
         });
     });
 
+    describe('$scope.reveal(cell)', function (){
+        var cell;
+
+        beforeEach(function (){
+            cell = {
+                hidden: true
+            };
+            $scope.reveal(cell);
+        });
+
+        it('should set cell.hidden to false', function () {
+            expect(cell.hidden).toBe(false);
+        });
+    });
+
     describe('createGrid(width, height)', function () {
         var grid,
             width,
