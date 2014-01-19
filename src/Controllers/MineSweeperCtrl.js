@@ -39,7 +39,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 ctrl.revealAll($scope.grid);
                 $scope.wins++;
                 var totalTime = ctrl.getTime() - $scope.startTime;
-                if(totalTime < $scope.bestTime) {
+                if (totalTime < $scope.bestTime) {
                     $scope.bestTime = totalTime;
                 }
                 $timeout(ctrl.showWin);
@@ -57,29 +57,43 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                     ctrl.lose();
                     return;
                 }
+                if (cell.nearby === 0) {
+                    ctrl.autoReveal($scope.grid, cell);
+                }
                 if (ctrl.hasWon($scope.grid)) {
                     ctrl.win();
                 }
             };
 
-            ctrl.traverseGrid = function(grid, fn) {
-                angular.forEach(grid, function(row) {
-                    angular.forEach(row, function(cell) {
+            ctrl.autoReveal = function (grid, cell) {
+                ctrl.traverseNearbyCells(grid, cell.x, cell.y, function (nearCell) {
+                    if (nearCell.hidden) {
+                        nearCell.hidden = false;
+                        if (nearCell.nearby === 0) {
+                            ctrl.autoReveal(grid, nearCell);
+                        }
+                    }
+                });
+            };
+
+            ctrl.traverseGrid = function (grid, fn) {
+                angular.forEach(grid, function (row) {
+                    angular.forEach(row, function (cell) {
                         fn(cell);
                     });
                 });
             };
 
-            ctrl.revealAll = function(grid) {
-                ctrl.traverseGrid(grid, function(cell) {
+            ctrl.revealAll = function (grid) {
+                ctrl.traverseGrid(grid, function (cell) {
                     cell.hidden = false;
                 });
             };
 
             ctrl.hasWon = function (grid) {
                 var won = true;
-                ctrl.traverseGrid(grid, function(cell) {
-                    if(cell.hidden && !cell.mine) {
+                ctrl.traverseGrid(grid, function (cell) {
+                    if (cell.hidden && !cell.mine) {
                         won = false;
                     }
                 });
@@ -131,12 +145,12 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                     }
                 }
             };
-
-            ctrl.getTime = function (){
+            
+            ctrl.getTime = function () {
                 return +new Date();
             };
 
-            $scope.resetGrid = function (){
+            $scope.resetGrid = function () {
                 $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
                 ctrl.addMines($scope.grid, $scope.mineCount);
                 $scope.startTime = ctrl.getTime();

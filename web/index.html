@@ -8,6 +8,7 @@
 <div ng-controller="MineSweeperCtrl">
     <h4>Angular Minesweeper</h4>
     <p>Score: {{wins}} Wins - {{losses}} Losses</p>
+    <p>Best Time: {{(bestTime / 1000) | number: 2}} seconds</p>
     <div class="grid">
         <div class="row" ng-repeat="row in grid track by $index">
             <div class="cell" ng-repeat="cell in row track by $index"

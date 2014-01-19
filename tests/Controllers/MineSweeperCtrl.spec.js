@@ -327,6 +327,9 @@ describe('minesweeper MineSweeperCtrl', function () {
     describe('showWin()', function () {
         beforeEach(function () {
             spyOn($scope, 'resetGrid');
+            $scope.grid = mineSweeperCtrl.createGrid(2, 2);
+            spyOn(mineSweeperCtrl, 'revealAll');
+            mineSweeperCtrl.win();
             mineSweeperCtrl.showWin();
         });
 
@@ -398,6 +401,7 @@ describe('minesweeper MineSweeperCtrl', function () {
             it('should call revealAll($scope.grid)', function () {
                 expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
             });
+
             it('should call revealAll($scope.grid)', function () {
                 expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
             });
@@ -407,7 +411,6 @@ describe('minesweeper MineSweeperCtrl', function () {
     describe('lose()', function () {
         beforeEach(function () {
             $scope.losses = 4;
-            spyOn($scope, 'resetGrid');
             $scope.grid = mineSweeperCtrl.createGrid(2, 2);
             spyOn(mineSweeperCtrl, 'revealAll');
             mineSweeperCtrl.lose();
@@ -425,9 +428,113 @@ describe('minesweeper MineSweeperCtrl', function () {
             expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
         });
     });
+    describe('autoReveal(grid, cell)', function () {
+        var grid, cell;
+
+        beforeEach(function () {
+            grid = mineSweeperCtrl.createGrid(5, 5);
+            // add a mines in specific spots
+
+            /* C = clicked, M = mine
+             C 0 2 M 2
+             0 0 3 M 3
+             2 3 5 M 3
+             M M M M 2
+             2 3 3 2 1
+             */
+            grid[3][0].mine = true;
+            grid[3][1].mine = true;
+            grid[3][2].mine = true;
+            grid[3][3].mine = true;
+            grid[2][3].mine = true;
+            grid[1][3].mine = true;
+            grid[0][3].mine = true;
+
+            grid[0][2].nearby = 2;
+            grid[1][2].nearby = 3;
+            grid[2][2].nearby = 5;
+            grid[2][1].nearby = 3;
+            grid[2][0].nearby = 2;
+            grid[0][4].nearby = 2;
+            grid[1][4].nearby = 3;
+            grid[2][4].nearby = 3;
+            grid[3][4].nearby = 2;
+            grid[4][4].nearby = 1;
+            grid[4][3].nearby = 2;
+            grid[4][2].nearby = 3;
+            grid[4][1].nearby = 3;
+            grid[4][0].nearby = 2;
+
+            cell = grid[0][0];
+            mineSweeperCtrl.autoReveal(grid, cell);
+        });
+
+        it('should reveal the proper cells', function () {
+            expect(grid[0][1].hidden).toBe(false);
+            expect(grid[0][2].hidden).toBe(false);
+            expect(grid[1][0].hidden).toBe(false);
+            expect(grid[1][1].hidden).toBe(false);
+            expect(grid[1][2].hidden).toBe(false);
+            expect(grid[2][0].hidden).toBe(false);
+            expect(grid[2][1].hidden).toBe(false);
+            expect(grid[2][2].hidden).toBe(false);
+        });
+
+        it('should not reveal other cells', function () {
+            expect(grid[3][0].hidden).toBe(true);
+            expect(grid[3][1].hidden).toBe(true);
+            expect(grid[3][2].hidden).toBe(true);
+            expect(grid[3][3].hidden).toBe(true);
+            expect(grid[2][3].hidden).toBe(true);
+            expect(grid[1][3].hidden).toBe(true);
+            expect(grid[0][3].hidden).toBe(true);
+            expect(grid[4][0].hidden).toBe(true);
+            expect(grid[4][1].hidden).toBe(true);
+            expect(grid[4][2].hidden).toBe(true);
+            expect(grid[4][3].hidden).toBe(true);
+            expect(grid[4][4].hidden).toBe(true);
+            expect(grid[4][4].hidden).toBe(true);
+            expect(grid[3][4].hidden).toBe(true);
+            expect(grid[2][4].hidden).toBe(true);
+            expect(grid[1][4].hidden).toBe(true);
+            expect(grid[0][4].hidden).toBe(true);
+        });
+    });
 
     describe('$scope.reveal(cell)', function () {
         var cell;
+
+        beforeEach(function () {
+            $scope.grid = mineSweeperCtrl.createGrid(5, 5);
+            // add a mines in specific spots
+
+            /* C = clicked, M = mine, 0 = not mine
+             C 0 0 M 0
+             0 0 0 M 0
+             0 0 0 M 0
+             M M M M 0
+             0 0 0 0 0
+             */
+            $scope.grid[3][0].mine = true;
+            $scope.grid[3][1].mine = true;
+            $scope.grid[3][2].mine = true;
+            $scope.grid[3][3].mine = true;
+            $scope.grid[2][3].mine = true;
+            $scope.grid[1][3].mine = true;
+            $scope.grid[0][3].mine = true;
+            spyOn(mineSweeperCtrl, 'autoReveal');
+        });
+
+        describe('when cell does not border a mine', function () {
+            beforeEach(function () {
+                cell = $scope.grid[0][0];
+                $scope.reveal(cell);
+            });
+
+            it('should call autoReveal(cell)', function () {
+                expect(mineSweeperCtrl.autoReveal).toHaveBeenCalledWith($scope.grid, cell);
+            });
+        });
 
         describe('when the cell is just hidden', function () {
             beforeEach(function () {
