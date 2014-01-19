@@ -10,13 +10,9 @@ checkout the various branches.
 
 ----
 
-# Step 1: Let's create the game board.
+#Step 2: Add mines to the grid
 
-1. Add the `web/index.html`. Make sure that you're referencing `../bower_components/angular/angular.js` and
-`js/minsweeper.js` (which is the location of our final .js file we're concatenating with our Grunt process)
-2. Add a controller file: `src/Controllers/MineSweeperCtrl.js' this will be the primary controller for our Minesweeper
-game.
-3. Add the module reference to bootstrap our app to your html tag: `<html ng-app="minesweeper">`.
-4. Add a `<div>` tag to the body that references our `MineSweeperCtrl`: `<div ng-controller="MineSweeperCtrl"></div>`.
-5. Add some code to generate the grid for our board to the controller `MineSweeperCtrl.js`.
-6. Add some repeaters to the html to display our grid.
+1. Create a method to add a specified number mines to the grid at random
+2. We'll have to test to make sure that we're not going to add a mine to the same cell twice! This means we're going
+to have to inject `$window` as a dependency so we can mock `$window.Math.random()`.
+3. We'll need to add something to the template to display the mines in the cells.
