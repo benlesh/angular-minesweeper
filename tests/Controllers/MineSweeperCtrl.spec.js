@@ -12,7 +12,7 @@ describe('minesweeper MineSweeperCtrl', function () {
 
             $scope = $rootScope.$new();
 
-            $timeout = jasmine.createSpy('$timeout').andCallFake(function(fn, delay) {
+            $timeout = jasmine.createSpy('$timeout').andCallFake(function (fn, delay) {
                 window.setTimeout(fn, delay);
                 $scope.$apply();
             });
@@ -189,13 +189,14 @@ describe('minesweeper MineSweeperCtrl', function () {
     });
 
     describe('traverseGrid(grid)', function () {
-        var grid, traversalFn, count, cellsPassed;
+        var grid, traversalFn, cellsPassed;
         beforeEach(function () {
             cellsPassed = [];
 
             traversalFn = function (cell) {
                 cellsPassed.push(cell);
             };
+
             grid = mineSweeperCtrl.createGrid(10, 10);
             mineSweeperCtrl.traverseGrid(grid, traversalFn);
         });
@@ -205,7 +206,7 @@ describe('minesweeper MineSweeperCtrl', function () {
         });
 
         it('should pass the cells to the traversal function', function () {
-            var y, x, i, cell;
+            var y, x, i;
             i = 0;
             for (y = 0; y < grid.length; y++) {
                 for (x = 0; x < grid[y].length; x++) {
@@ -293,28 +294,69 @@ describe('minesweeper MineSweeperCtrl', function () {
         });
     });
 
+    describe('$scope.resetGrid()', function () {
+        var originalStartTime;
+
+        beforeEach(function () {
+            $scope.grid = null;
+            $scope.gridWidth = 20;
+            $scope.gridHeight = 20;
+            $scope.mineCount = 21;
+            originalStartTime = $scope.startTime = new Date(2013, 0, 1);
+
+            spyOn(mineSweeperCtrl, 'getTime').andReturn(123456);
+            spyOn(mineSweeperCtrl, 'createGrid').andCallThrough();
+            spyOn(mineSweeperCtrl, 'addMines').andCallThrough();
+
+            $scope.resetGrid();
+        });
+
+        it('should call createGrid()', function () {
+            expect(mineSweeperCtrl.createGrid).toHaveBeenCalledWith(20, 20);
+        });
+
+        it('should call addMines()', function () {
+            expect(mineSweeperCtrl.addMines).toHaveBeenCalledWith($scope.grid, 21);
+        });
+
+        it('should update $scope.startTime', function () {
+            expect(+$scope.startTime).toBe(123456);
+        });
+    });
+
     describe('showWin()', function () {
         beforeEach(function () {
+            spyOn($scope, 'resetGrid');
             mineSweeperCtrl.showWin();
         });
 
         it('should alert the user', function () {
             expect(mockWindow.alert).toHaveBeenCalledWith('you win!');
         });
+
+        it('should call $scope.resetGrid()', function () {
+            expect($scope.resetGrid).toHaveBeenCalled();
+        });
     });
 
     describe('showLoss()', function () {
         beforeEach(function () {
+            spyOn($scope, 'resetGrid');
             mineSweeperCtrl.showLoss();
         });
 
         it('should alert the user', function () {
             expect(mockWindow.alert).toHaveBeenCalledWith('you lose!');
         });
+
+        it('should call $scope.resetGrid()', function () {
+            expect($scope.resetGrid).toHaveBeenCalled();
+        });
     });
 
     describe('win()', function () {
         beforeEach(function () {
+            $scope.wins = 3;
             $scope.grid = mineSweeperCtrl.createGrid(2, 2);
             spyOn(mineSweeperCtrl, 'revealAll');
             spyOn(mineSweeperCtrl, 'showWin');
@@ -325,13 +367,47 @@ describe('minesweeper MineSweeperCtrl', function () {
             expect($timeout).toHaveBeenCalledWith(mineSweeperCtrl.showWin);
         });
 
-        it('should call revealAll($scope.grid)', function () {
-            expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
+        it('should increment $scope.wins', function () {
+            expect($scope.wins).toBe(4);
+        });
+
+        describe('when total time is less than $scope.bestTime', function () {
+            beforeEach(function () {
+                spyOn(mineSweeperCtrl, 'getTime').andReturn(1234);
+                $scope.bestTime = 10000000;
+                $scope.startTime = 0;
+                mineSweeperCtrl.win();
+            });
+
+            it('should update $scope.bestTime', function () {
+                expect($scope.bestTime).toBe(1234);
+            });
+        });
+
+        describe('when total time is greater than $scope.bestTime', function () {
+            beforeEach(function () {
+                $scope.bestTime = -1000; // negative time is my favorite!
+                $scope.startTime = new Date();
+                mineSweeperCtrl.win();
+            });
+
+            it('should not update $scope.bestTime', function () {
+                expect($scope.bestTime).toBe(-1000);
+            });
+
+            it('should call revealAll($scope.grid)', function () {
+                expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
+            });
+            it('should call revealAll($scope.grid)', function () {
+                expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
+            });
         });
     });
 
     describe('lose()', function () {
         beforeEach(function () {
+            $scope.losses = 4;
+            spyOn($scope, 'resetGrid');
             $scope.grid = mineSweeperCtrl.createGrid(2, 2);
             spyOn(mineSweeperCtrl, 'revealAll');
             mineSweeperCtrl.lose();
@@ -339,6 +415,10 @@ describe('minesweeper MineSweeperCtrl', function () {
 
         it('should call showLoss() on a $timeout', function () {
             expect($timeout).toHaveBeenCalledWith(mineSweeperCtrl.showLoss);
+        });
+
+        it('should increment $scope.losses', function () {
+            expect($scope.losses).toBe(5);
         });
 
         it('should call revealAll($scope.grid)', function () {
@@ -405,8 +485,8 @@ describe('minesweeper MineSweeperCtrl', function () {
         it('should exist', function () {
             expect(typeof mineSweeperCtrl.lose).toBe('function');
         });
-
     });
+
     describe('createGrid(width, height)', function () {
         var grid,
             width,
@@ -432,6 +512,12 @@ describe('minesweeper MineSweeperCtrl', function () {
             for (i = 0; i < grid.length; i++) {
                 expect(grid[i].length).toBe(width);
             }
+        });
+    });
+
+    describe('getTime()', function () {
+        it('should get the current time', function () {
+            expect(mineSweeperCtrl.getTime()).toBe(+new Date());
         });
     });
 });

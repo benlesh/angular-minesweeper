@@ -26,21 +26,29 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
 
             ctrl.lose = function () {
                 ctrl.revealAll($scope.grid);
+                $scope.losses++;
                 $timeout(ctrl.showLoss);
             };
 
             ctrl.showLoss = function () {
                 $window.alert('you lose!');
+                $scope.resetGrid();
             };
 
             ctrl.win = function () {
                 ctrl.revealAll($scope.grid);
+                $scope.wins++;
+                var totalTime = ctrl.getTime() - $scope.startTime;
+                if(totalTime < $scope.bestTime) {
+                    $scope.bestTime = totalTime;
+                }
                 $timeout(ctrl.showWin);
             };
 
 
             ctrl.showWin = function () {
                 $window.alert('you win!');
+                $scope.resetGrid();
             };
 
             $scope.reveal = function (cell) {
@@ -124,11 +132,22 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 }
             };
 
+            ctrl.getTime = function (){
+                return +new Date();
+            };
+
+            $scope.resetGrid = function (){
+                $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
+                ctrl.addMines($scope.grid, $scope.mineCount);
+                $scope.startTime = ctrl.getTime();
+            };
+
             $scope.gridWidth = 8;
             $scope.gridHeight = 8;
             $scope.mineCount = 10;
-
-            $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
-            ctrl.addMines($scope.grid, $scope.mineCount);
+            $scope.wins = 0;
+            $scope.losses = 0;
+            $scope.bestTime = 15 * 60 * 1000; // 15 minutes in milliseconds
+            $scope.resetGrid();
         }
     ]);

@@ -10,11 +10,15 @@ checkout the various branches.
 
 ----
 
-# Step 5 - Add some game logic
+#Step 6: Score keeping (and resetting the game).
 
-1. End the game if the user clicks a mine.
-   a. Add a check in the click event to see if the cell clicked is a mine.
-   b. If the user clicks a mine, the user loses.
-2. End the game if the user clicks everything BUT the mines.
-   a. Add a check in the click to see if there is nothing left hidden but mines.
-   b. If only mines are left, then the user wins.
+1. Have the game board reset after a win or a lose condition is met.
+   - Create a reset function: Refactor grid creation and adding of mines to be something that can be called within
+   the `win()` or `lose()` functions.
+   - Call the reset function from the win() and lose() functions.
+
+2. Create a scoring mechanism. Could be a timer, could be wins and loses. We'll do both.
+   - Increment a wins counter in `win()`
+   - Increment a losses counter in `lose()`
+   - Get a timestamp at the beginning of the game.
+   - Get a timestamp at the end of the game and do some math to record the "best time"
