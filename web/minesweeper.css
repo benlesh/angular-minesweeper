@@ -60,6 +60,10 @@
     content: "M";
 }
 
+.flag {
+    color: red;
+}
+
 .flag:after {
     font-family: Wingdings, sans-serif;
     content: "P";

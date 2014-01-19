@@ -10,9 +10,8 @@ checkout the various branches.
 
 ----
 
-#Step 8: Add a form to create a new game
+#Step 9: Add "flagging" on right-click
 
-1. Hide the grid until a game is started.
-2. Add a form to update the game parameters.
-3. Add some validation to the form.
-4. Wire it up with a start button (submit)
+1. Add a right-click directive.
+2. Create an event to toggle a "flag" on the cell.
+3. Wire it up.
