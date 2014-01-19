@@ -10,9 +10,13 @@ checkout the various branches.
 
 ----
 
-#Step 2: Add mines to the grid
+#Step 3: update numbers around mines.
 
-1. Create a method to add a specified number mines to the grid at random
-2. We'll have to test to make sure that we're not going to add a mine to the same cell twice! This means we're going
-to have to inject `$window` as a dependency so we can mock `$window.Math.random()`.
-3. We'll need to add something to the template to display the mines in the cells.
+One of the features of minesweeper is that it displays a number of the mines in the adjacent 8 cells when you reveal
+a cell.
+
+To do this we'll need to:
+
+1. Build a method to traverse nearby cells. It will have to handle cases where we're on the edge of the grid.
+2. Use our new method when we're adding mines to the grid to update nearby cells. The updates should increment a number.
+3. Display that number on the grid if it's more than 1.
