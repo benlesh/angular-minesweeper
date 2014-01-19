@@ -10,8 +10,9 @@ checkout the various branches.
 
 ----
 
-#Step 9: Add "flagging" on right-click
+#Multiplayer with SignalR Step 1: Setting up the project
 
-1. Add a right-click directive.
-2. Create an event to toggle a "flag" on the cell.
-3. Wire it up.
+1. Add a "server" project in .NET. We're going to use .NET 4.0 and SignalR 1.* since that's aligns to what technologies
+we use here at Aesynt.
+   - Add a MVC 4 project
+   - Use NuGet to add SignalR 1.1.4 (not 2, because we're using .NET 4.0 for now)
