@@ -189,6 +189,10 @@ angular.module('minesweeper').controller('MultiplayerGameCtrl', [
         };
 
         $scope.$on('minesweeper:playerList', self.onPlayerList);
+
+        $scope.setName = function (){
+            minesweeperServer.setName($scope.name);
+        };
     }
 ]);
 angular.module('minesweeper').directive('rightClick', function($parse) {

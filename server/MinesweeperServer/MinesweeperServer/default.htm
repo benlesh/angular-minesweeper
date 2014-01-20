@@ -5,11 +5,19 @@
 </head>
 <body>
   <div ng-controller="MultiplayerGameCtrl">
+    <div>
+      <form name="nameForm" ng-submit="setName()">
+      <label for="name">
+        Name</label>
+      <input type="text" id="name" name="name" ng-model="name" required />
+      <button ng-disabled="nameForm.$invalid">
+        Set</button>
+      </form>
+    </div>
     <div ng-repeat="player in players track by player.ConnectionId">
       {{ player.Name }}
     </div>
   </div>
-
   <script src="Scripts/jquery-1.10.2.min.js"></script>
   <script src="Scripts/jquery.signalR-1.1.4.min.js"></script>
   <script src="Scripts/angular.min.js"></script>
