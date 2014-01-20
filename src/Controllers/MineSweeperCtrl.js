@@ -42,6 +42,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 if (totalTime < $scope.bestTime) {
                     $scope.bestTime = totalTime;
                 }
+                minesweeperServer.submitWin($scope.bestTime);
                 $timeout(ctrl.showWin);
             };
 
@@ -172,7 +173,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
 
             $scope.gridWidth = 8;
             $scope.gridHeight = 8;
-            $scope.mineCount = 10;
+            $scope.mineCount = 8;
             $scope.wins = 0;
             $scope.losses = 0;
             $scope.bestTime = 15 * 60 * 1000; // 15 minutes in milliseconds

@@ -42,6 +42,11 @@
                 },
                 connectionId: function () {
                     return conn.hub.id;
+                },
+                submitWin: function (winTimeMs) {
+                    connectionStarted.then(function() {
+                        hub.server.submitWin(winTimeMs);
+                    });
                 }
             };
         }

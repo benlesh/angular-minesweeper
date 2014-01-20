@@ -29,7 +29,8 @@ describe('minesweeper MineSweeperCtrl', function () {
             };
 
             minesweeperServer = {
-                updateGrid: jasmine.createSpy('minesweeperServer.updateGrid')
+                updateGrid: jasmine.createSpy('minesweeperServer.updateGrid'),
+                submitWin: jasmine.createSpy('minesweeperServer.submitWin')
             };
 
             mineSweeperCtrl = $controller('MineSweeperCtrl', {
