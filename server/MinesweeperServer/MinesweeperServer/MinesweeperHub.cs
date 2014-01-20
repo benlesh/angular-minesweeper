@@ -43,11 +43,23 @@ namespace MinesweeperServer
                 SendPlayerList();
             }
         }
+
+        public void UpdateGrid(IEnumerable<IEnumerable<bool>> grid) {
+            Player player;
+            if (PlayerList.TryGetValue(Context.ConnectionId, out player))
+            {
+                lock (player) {
+                    player.Grid = grid;
+                }
+                SendPlayerList();
+            }
+        }
     }
 
     public class Player {
         public readonly string ConnectionId ;
         public string Name { get; set; }
+        public IEnumerable<IEnumerable<bool>> Grid { get; set; } 
 
         public Player(string connectionId) {
             ConnectionId = connectionId;

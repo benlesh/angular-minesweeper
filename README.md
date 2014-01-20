@@ -10,13 +10,15 @@ checkout the various branches.
 
 ----
 
-# Multiplayer with SignalR Step 5: Set up Minesweeper game for user
+# Multiplayer with SignalR Step 6: Show boards for other players
 
-In this step, we're going to take the Minesweeper game we already made, and put it on the screen for our user
-to use.
+### On the server
+
+- Add hub method `UpdateGrid` that accepts an array of booleans for what's shown and what's hidden.
+- Add that grid to the player's Player record in the PlayerList
+- Have `UpdateGrid` call `SendPlayerList`
 
 ### On the client
 
-- Add the html from the single player project `web/index.html`.
-- Change the controller to hard code a smaller grid size and mine count.
-- Also copy the stylesheet over so we can use it.
+- Identify the user's player record in the player list by connection id, and filter it out of the display.
+- Create grids for the other players that are built from the array of bools returned from the server.

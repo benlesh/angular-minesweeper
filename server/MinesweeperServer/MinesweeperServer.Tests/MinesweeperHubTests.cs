@@ -65,5 +65,15 @@ namespace MinesweeperServer.Tests
             Assert.That(PlayerList[_connectionId].Name, Is.EqualTo("New Name"));
             Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(1));
         }
+
+        [Test]
+        public void UpdateGridTest()
+        {
+            PlayerList.AddOrUpdate(_connectionId, (connId) => new Player(connId), (connId, plyr) => plyr);
+            var grid = new List<List<bool>>();
+            _hub.UpdateGrid(grid);
+            Assert.That(PlayerList[_connectionId].Grid, Is.EqualTo(grid));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(1));
+        }
     }
 }
