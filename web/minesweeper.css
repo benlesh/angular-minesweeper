@@ -60,6 +60,18 @@
     content: "M";
 }
 
+.player {
+    float: left;
+    width: auto;
+    height: auto;
+    margin: 5px;
+}
+
+.grid.grid-opponent .cell {
+    width: 10px;
+    height: 10px;
+}
+
 .flag {
     color: red;
 }

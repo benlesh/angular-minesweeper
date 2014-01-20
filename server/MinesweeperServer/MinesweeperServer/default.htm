@@ -15,7 +15,7 @@
         Set</button>
       </form>
     </div>
-    <div ng-controller="MineSweeperCtrl">
+    <div class="player" ng-controller="MineSweeperCtrl">
       <h4>
         You</h4>
       <div class="grid">
@@ -29,14 +29,12 @@
         </div>
       </div>
     </div>
-    <div>
-      <div ng-repeat="player in players track by player.ConnectionId">
-        <h4 ng-bind="player.Name">
-        </h4>
-        <div class="grid">
-          <div class="row" ng-repeat="row in player.Grid track by $index">
-            <div class="cell" ng-repeat="cell in row track by $index" ng-class="{ hidden: !cell }">
-            </div>
+    <div class="player" ng-repeat="player in players track by player.ConnectionId">
+      <h4 ng-bind="player.Name">
+      </h4>
+      <div class="grid grid-opponent">
+        <div class="row" ng-repeat="row in player.Grid track by $index">
+          <div class="cell" ng-repeat="cell in row track by $index" ng-class="{ hidden: !cell }">
           </div>
         </div>
       </div>
