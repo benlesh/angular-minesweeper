@@ -10,16 +10,16 @@ checkout the various branches.
 
 ----
 
-# Multiplayer with SignalR Step 3: Get a list of connected players
+# Multiplayer with SignalR Step 7: Notify others when you've won
 
-### On the Server:
+### On the server
+- set up an a hub method `SubmitWin` that accepts an int or long for milliseconds. This will be a count of how long
+it took the user to win. When it's called, update the user's `Player` object in the PlayerList, if it's less than
+the stored value, or if the stored value is null.
+- Have the `SubmitWin` call `SendPlayerList` to update results.
 
-- Handle `OnConnect` and `OnDisconnect` in your Hub to maintain a list of Players.
-- Create a Hub method `SendPlayers` to Broadcast a Player List to all connected clients.
-- Have `OnConnect` and `OnDisconnect` call `SendPlayers` after it updates the list.
-
-### On the Client:
-
-- Have the server service fire an Angular event when the player list has been updated.
-- Create a controller for your multiplayer game called `MultiplayerGameCtrl`, have it handle the
-event we just created and update a property on the $scope to display.
+### On the client
+- Whenever the user wins, have it send the number of milliseconds it took to the server with the hub's `SubmitWin`
+- When the playerList is retrieved, find the player with the lowest time to win and flag them as "king".
+- Be sure to check null/undefined BestTime values and set them to something really high so they sort properly.
+- Now sort the fastest winners to the top of the list.

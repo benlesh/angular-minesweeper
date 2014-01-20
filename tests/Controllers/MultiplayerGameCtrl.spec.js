@@ -14,7 +14,9 @@ describe('minesweeper MultiplayerGameCtrl', function () {
             spyOn($scope, '$on').andCallThrough();
 
             minesweeperServer = {
-                sendPlayerList: jasmine.createSpy('minesweeperServer.sendPlayerList')
+                sendPlayerList: jasmine.createSpy('minesweeperServer.sendPlayerList'),
+                setName: jasmine.createSpy('minesweeperServer.setName'),
+                connectionId: jasmine.createSpy('minesweeperServer.connectionId').andReturn('test connection id')
             };
 
             ctrl = $controller('MultiplayerGameCtrl', {
@@ -40,7 +42,18 @@ describe('minesweeper MultiplayerGameCtrl', function () {
         });
 
         it('should set $scope.players', function () {
-            expect($scope.players).toBe(playerList);
+            expect($scope.players).toEqual(playerList);
+        });
+    });
+
+    describe('$scope.setName()', function (){
+        beforeEach(function(){
+            $scope.name = 'My Name';
+            $scope.setName();
+        });
+
+        it('should call minesweeperServer.setName($scope.name)', function (){
+            expect(minesweeperServer.setName).toHaveBeenCalledWith('My Name');
         });
     });
 });

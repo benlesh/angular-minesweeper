@@ -1,7 +1,7 @@
 angular.module('minesweeper').controller('MineSweeperCtrl',
     [
-        '$scope', '$window', '$timeout',
-        function ($scope, $window, $timeout) {
+        '$scope', '$window', '$timeout', 'minesweeperServer',
+        function ($scope, $window, $timeout, minesweeperServer) {
             var ctrl = this,
                 Math = $window.Math;
 
@@ -42,6 +42,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 if (totalTime < $scope.bestTime) {
                     $scope.bestTime = totalTime;
                 }
+                minesweeperServer.submitWin($scope.bestTime);
                 $timeout(ctrl.showWin);
             };
 
@@ -53,6 +54,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
 
             $scope.reveal = function (cell) {
                 cell.hidden = false;
+                ctrl.updateGrid($scope.grid);
                 if (cell.mine) {
                     ctrl.lose();
                     return;
@@ -63,6 +65,18 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 if (ctrl.hasWon($scope.grid)) {
                     ctrl.win();
                 }
+            };
+
+            ctrl.updateGrid = function(grid) {
+                var boolGrid = [];
+                angular.forEach(grid, function(row) {
+                    var boolRow = [];
+                    angular.forEach(row, function(cell) {
+                        boolRow.push(!cell.hidden);
+                    });
+                    boolGrid.push(boolRow);
+                });
+                minesweeperServer.updateGrid(boolGrid);
             };
 
             ctrl.autoReveal = function (grid, cell) {
@@ -154,26 +168,17 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
                 ctrl.addMines($scope.grid, $scope.mineCount);
                 $scope.startTime = ctrl.getTime();
+                ctrl.updateGrid($scope.grid);
             };
 
             $scope.gridWidth = 8;
             $scope.gridHeight = 8;
-            $scope.mineCount = 10;
+            $scope.mineCount = 8;
             $scope.wins = 0;
             $scope.losses = 0;
             $scope.bestTime = 15 * 60 * 1000; // 15 minutes in milliseconds
-            $scope.showStartForm = true;
-            $scope.showGrid = false;
 
-            $scope.startGame = function (){
-                $scope.showStartForm = false;
-                $scope.showGrid = true;
-                $scope.resetGrid();
-            };
-
-            $scope.newGame = function (){
-                $scope.showStartForm = true;
-                $scope.showGrid = false;
-            };
+            //start the game
+            $scope.resetGrid();
         }
     ]);

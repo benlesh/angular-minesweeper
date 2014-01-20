@@ -43,6 +43,12 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: ['web/js/minesweeper.js'],
                         dest: 'server/MinesweeperServer/MinesweeperServer/Scripts'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['web/minesweeper.css'],
+                        dest: 'server/MinesweeperServer/MinesweeperServer'
                     }
                 ]
             }

@@ -1,8 +1,8 @@
 angular.module('minesweeper', []);
 angular.module('minesweeper').controller('MineSweeperCtrl',
     [
-        '$scope', '$window', '$timeout',
-        function ($scope, $window, $timeout) {
+        '$scope', '$window', '$timeout', 'minesweeperServer',
+        function ($scope, $window, $timeout, minesweeperServer) {
             var ctrl = this,
                 Math = $window.Math;
 
@@ -43,6 +43,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 if (totalTime < $scope.bestTime) {
                     $scope.bestTime = totalTime;
                 }
+                minesweeperServer.submitWin($scope.bestTime);
                 $timeout(ctrl.showWin);
             };
 
@@ -54,6 +55,7 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
 
             $scope.reveal = function (cell) {
                 cell.hidden = false;
+                ctrl.updateGrid($scope.grid);
                 if (cell.mine) {
                     ctrl.lose();
                     return;
@@ -64,6 +66,18 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 if (ctrl.hasWon($scope.grid)) {
                     ctrl.win();
                 }
+            };
+
+            ctrl.updateGrid = function(grid) {
+                var boolGrid = [];
+                angular.forEach(grid, function(row) {
+                    var boolRow = [];
+                    angular.forEach(row, function(cell) {
+                        boolRow.push(!cell.hidden);
+                    });
+                    boolGrid.push(boolRow);
+                });
+                minesweeperServer.updateGrid(boolGrid);
             };
 
             ctrl.autoReveal = function (grid, cell) {
@@ -155,27 +169,18 @@ angular.module('minesweeper').controller('MineSweeperCtrl',
                 $scope.grid = ctrl.createGrid($scope.gridWidth, $scope.gridHeight);
                 ctrl.addMines($scope.grid, $scope.mineCount);
                 $scope.startTime = ctrl.getTime();
+                ctrl.updateGrid($scope.grid);
             };
 
             $scope.gridWidth = 8;
             $scope.gridHeight = 8;
-            $scope.mineCount = 10;
+            $scope.mineCount = 8;
             $scope.wins = 0;
             $scope.losses = 0;
             $scope.bestTime = 15 * 60 * 1000; // 15 minutes in milliseconds
-            $scope.showStartForm = true;
-            $scope.showGrid = false;
 
-            $scope.startGame = function (){
-                $scope.showStartForm = false;
-                $scope.showGrid = true;
-                $scope.resetGrid();
-            };
-
-            $scope.newGame = function (){
-                $scope.showStartForm = true;
-                $scope.showGrid = false;
-            };
+            //start the game
+            $scope.resetGrid();
         }
     ]);
 
@@ -185,10 +190,42 @@ angular.module('minesweeper').controller('MultiplayerGameCtrl', [
         var self = this;
 
         self.onPlayerList = function (e, playerList) {
-            $scope.players = playerList;
+            // players that don't have a BestTime need to be sorted
+            // to last place.
+            angular.forEach(playerList, function(player) {
+                player.king = false;
+                if(!player.BestTime && player.BestTime !== 0) {
+                    player.BestTime = Infinity;
+                }
+
+                // get the currest user's best time for display.
+                if(player.ConnectionId === minesweeperServer.connectionId()) {
+                    $scope.userBestTime = player.BestTime;
+                }
+            });
+
+            // sort them by BestTime ascending.
+            playerList = playerList.sort(function(a, b) {
+                return a.BestTime > b.BestTime;
+            });
+
+            // mark the king.
+            playerList[0].king = true;
+
+            // if the user is the king. make note of it. Since it's displayed elsewhere.
+            $scope.userIsKing = playerList[0].ConnectionId === minesweeperServer.connectionId();
+
+            // filter out the user from the players list to display.
+            $scope.players = playerList.filter(function(player) {
+                return player.ConnectionId !== minesweeperServer.connectionId();
+            });
         };
 
         $scope.$on('minesweeper:playerList', self.onPlayerList);
+
+        $scope.setName = function (){
+            minesweeperServer.setName($scope.name);
+        };
     }
 ]);
 angular.module('minesweeper').directive('rightClick', function($parse) {
