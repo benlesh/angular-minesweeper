@@ -43,14 +43,6 @@ describe('minesweeper MineSweeperCtrl', function () {
         it('should set $scope.gridHeight', function () {
             expect($scope.gridHeight).toBeGreaterThan(2);
         });
-
-        it('should set $scope.showStartForm', function () {
-            expect($scope.showStartForm).toBe(true);
-        });
-
-        it('should set $scope.showGrid', function () {
-            expect($scope.showGrid).toBe(false);
-        });
     });
 
     describe('traverseNearbyCells(grid, originX, originY, fn)', function () {
@@ -429,43 +421,6 @@ describe('minesweeper MineSweeperCtrl', function () {
 
         it('should call revealAll($scope.grid)', function () {
             expect(mineSweeperCtrl.revealAll).toHaveBeenCalledWith($scope.grid);
-        });
-    });
-
-    describe('$scope.newGame()', function () {
-        beforeEach(function (){
-            $scope.showGrid = true;
-            $scope.showStartForm = false;
-            $scope.newGame();
-        });
-
-        it('should set $scope.showGrid to false', function () {
-            expect($scope.showGrid).toBe(false);
-        });
-
-        it('should set $scope.showStartForm to true', function () {
-            expect($scope.showStartForm).toBe(true);
-        });
-    });
-
-    describe('$scope.startGame()', function () {
-        beforeEach(function () {
-            $scope.showGrid = false;
-            $scope.showStartForm = true;
-            spyOn($scope, 'resetGrid').andCallThrough();
-            $scope.startGame();
-        });
-
-        it('should set $scope.showGrid to true', function () {
-            expect($scope.showGrid).toBe(true);
-        });
-
-        it('should set $scope.showStartForm to false', function () {
-            expect($scope.showStartForm).toBe(false);
-        });
-
-        it('should call $scope.resetGrid()', function () {
-            expect($scope.resetGrid).toHaveBeenCalled();
         });
     });
 

@@ -10,12 +10,13 @@ checkout the various branches.
 
 ----
 
-# Multiplayer with SignalR Step 4: Set player name
+# Multiplayer with SignalR Step 5: Set up Minesweeper game for user
 
-### On the server:
-- Add a `SetName` method to the hub that sets the `Name` of the `Player` in the PlayerList.
-- Have `SetName` call `SendPlayerList`
+In this step, we're going to take the Minesweeper game we already made, and put it on the screen for our user
+to use.
 
-### On the client:
-- Add a `setName` method to the `minesweeperServer` service that calls `SetName` on the hub.
-- Set up a form to update the user's name that calls `minesweeperServer.setName()`
+### On the client
+
+- Add the html from the single player project `web/index.html`.
+- Change the controller to hard code a smaller grid size and mine count.
+- Also copy the stylesheet over so we can use it.
