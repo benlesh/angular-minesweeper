@@ -30,8 +30,18 @@ namespace MinesweeperServer
             return base.OnDisconnected();
         }
 
-        public void SendPlayerList() {
+        public virtual void SendPlayerList() {
             Clients.All.onPlayerList(PlayerList.Values.ToArray());
+        }
+
+        public void SetName(string name) {
+            Player player;
+            if (PlayerList.TryGetValue(Context.ConnectionId, out player)) {
+                lock (player) {
+                    player.Name = name;
+                }
+                SendPlayerList();
+            }
         }
     }
 
