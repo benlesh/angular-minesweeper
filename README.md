@@ -10,9 +10,16 @@ checkout the various branches.
 
 ----
 
-#Multiplayer with SignalR Step 1: Setting up the project
+# Multiplayer with SignalR Step 7: Notify others when you've won
 
-1. Add a "server" project in .NET. We're going to use .NET 4.0 and SignalR 1.* since that's aligns to what technologies
-we use here at Aesynt.
-   - Add a MVC 4 project
-   - Use NuGet to add SignalR 1.1.4 (not 2, because we're using .NET 4.0 for now)
+### On the server
+- set up an a hub method `SubmitWin` that accepts an int or long for milliseconds. This will be a count of how long
+it took the user to win. When it's called, update the user's `Player` object in the PlayerList, if it's less than
+the stored value, or if the stored value is null.
+- Have the `SubmitWin` call `SendPlayerList` to update results.
+
+### On the client
+- Whenever the user wins, have it send the number of milliseconds it took to the server with the hub's `SubmitWin`
+- When the playerList is retrieved, find the player with the lowest time to win and flag them as "king".
+- Be sure to check null/undefined BestTime values and set them to something really high so they sort properly.
+- Now sort the fastest winners to the top of the list.
