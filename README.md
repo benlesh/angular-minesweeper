@@ -22,3 +22,4 @@ checkout the various branches.
 
 - Identify the user's player record in the player list by connection id, and filter it out of the display.
 - Create grids for the other players that are built from the array of bools returned from the server.
+- When the user reveals a square, call `UpdateGrid` on the server.

@@ -1,6 +1,7 @@
 describe('minesweeper MineSweeperCtrl', function () {
     var mineSweeperCtrl,
         mockWindow,
+        minesweeperServer,
         $timeout,
         $scope;
 
@@ -27,10 +28,15 @@ describe('minesweeper MineSweeperCtrl', function () {
                 alert: jasmine.createSpy('$window.alert')
             };
 
+            minesweeperServer = {
+                updateGrid: jasmine.createSpy('minesweeperServer.updateGrid')
+            };
+
             mineSweeperCtrl = $controller('MineSweeperCtrl', {
                 $scope: $scope,
                 $window: mockWindow,
-                $timeout: $timeout
+                $timeout: $timeout,
+                minesweeperServer: minesweeperServer
             });
         });
     });

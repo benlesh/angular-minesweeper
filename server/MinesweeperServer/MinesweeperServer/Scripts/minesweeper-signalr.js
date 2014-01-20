@@ -34,6 +34,14 @@
                     connectionStarted.then(function () {
                         hub.server.setName(name);
                     });
+                },
+                updateGrid: function (boolGrid) {
+                    connectionStarted.then(function () {
+                        hub.server.updateGrid(boolGrid);
+                    });
+                },
+                connectionId: function () {
+                    return conn.hub.id;
                 }
             };
         }

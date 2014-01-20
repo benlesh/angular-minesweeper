@@ -15,7 +15,8 @@ describe('minesweeper MultiplayerGameCtrl', function () {
 
             minesweeperServer = {
                 sendPlayerList: jasmine.createSpy('minesweeperServer.sendPlayerList'),
-                setName: jasmine.createSpy('minesweeperServer.setName')
+                setName: jasmine.createSpy('minesweeperServer.setName'),
+                connectionId: jasmine.createSpy('minesweeperServer.connectionId').andReturn('test connection id')
             };
 
             ctrl = $controller('MultiplayerGameCtrl', {
@@ -41,7 +42,7 @@ describe('minesweeper MultiplayerGameCtrl', function () {
         });
 
         it('should set $scope.players', function () {
-            expect($scope.players).toBe(playerList);
+            expect($scope.players).toEqual(playerList);
         });
     });
 
