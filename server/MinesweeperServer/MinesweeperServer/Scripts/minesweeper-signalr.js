@@ -1,32 +1,55 @@
 ﻿(function (angular) {
     var app = angular.module('minesweeper-signalr', ['minesweeper']);
 
-    app.factory('minesweeperServer', ['$window', '$rootScope', function ($window, $rootScope) {
-        var conn = $window.$.connection,
+    app.factory('minesweeperServer', [
+        '$window', '$rootScope', '$q',
+        function ($window, $rootScope, $q) {
+            var conn = $window.$.connection,
             hub = conn.minesweeperHub;
 
-        // start the connection
-        var connectionStarted = conn.hub.start();
+            // start the connection
+            var startDeferred = $q.defer();
+            var connectionStarted = startDeferred.promise;
+            conn.hub.start().done(startDeferred.resolve);
 
-        // set up events to monitor server pushes.
-        hub.client.onServerMessage = function (message) {
-            $rootScope.$apply(function () {
-                $rootScope.$broadcast('minesweeper:serverMessage', message);
-            });
-        };
+            // set up events to monitor server pushes.
+            hub.client.onServerMessage = function (message) {
+                $rootScope.$apply(function () {
+                    $rootScope.$broadcast('minesweeper:serverMessage', message);
+                });
+            };
 
-        // event for player list
-        hub.client.onPlayerList = function (playerList) {
-            $rootScope.$apply(function () {
-                $rootScope.$broadcast('minesweeper:playerList', playerList);
-            });
-        };
+            // event for player list
+            hub.client.onPlayerList = function (playerList) {
+                $rootScope.$apply(function () {
+                    $rootScope.$broadcast('minesweeper:playerList', playerList);
+                });
+            };
 
-        return {
-            ping: function () {
-                connectionStarted.then(hub.client.ping);
-            }
-        };
-    } ]);
+            return {
+                ping: function () {
+                    connectionStarted.then(hub.server.ping);
+                },
+                setName: function (name) {
+                    connectionStarted.then(function () {
+                        hub.server.setName(name);
+                    });
+                },
+                updateGrid: function (boolGrid) {
+                    connectionStarted.then(function () {
+                        hub.server.updateGrid(boolGrid);
+                    });
+                },
+                connectionId: function () {
+                    return conn.hub.id;
+                },
+                submitWin: function (winTimeMs) {
+                    connectionStarted.then(function() {
+                        hub.server.submitWin(winTimeMs);
+                    });
+                }
+            };
+        }
+    ]);
 
 } (window.angular));

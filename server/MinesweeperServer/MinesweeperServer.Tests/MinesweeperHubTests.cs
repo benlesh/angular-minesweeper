@@ -10,7 +10,7 @@ namespace MinesweeperServer.Tests
     [TestFixture]
     public class MinesweeperHubTests
     {
-        private MinesweeperHub _hub;
+        private TestableMinesweeperHub _hub;
         private const string _connectionId = "MY CONNECTION ID";
         private ConcurrentDictionary<string, Player> PlayerList;
 
@@ -44,6 +44,7 @@ namespace MinesweeperServer.Tests
             Assert.That(PlayerList[_connectionId], Is.Not.Null);
             Assert.That(PlayerList[_connectionId].Name, Is.EqualTo("Anonymous"));
             Assert.That(PlayerList[_connectionId].ConnectionId, Is.EqualTo(_connectionId));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(1));
         }
 
         [Test]
@@ -54,6 +55,42 @@ namespace MinesweeperServer.Tests
             Assert.That(PlayerList.Count, Is.EqualTo(0));
             Player player;
             Assert.That(PlayerList.TryGetValue(_connectionId, out player), Is.False);
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void SetNameTest() {
+            PlayerList.AddOrUpdate(_connectionId, (connId) => new Player(connId), (connId, plyr) => plyr);
+            _hub.SetName("New Name");
+            Assert.That(PlayerList[_connectionId].Name, Is.EqualTo("New Name"));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void UpdateGridTest()
+        {
+            PlayerList.AddOrUpdate(_connectionId, (connId) => new Player(connId), (connId, plyr) => plyr);
+            var grid = new List<List<bool>>();
+            _hub.UpdateGrid(grid);
+            Assert.That(PlayerList[_connectionId].Grid, Is.EqualTo(grid));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void SubmitWinTest() {
+            PlayerList.AddOrUpdate(_connectionId, (connId) => new Player(connId), (connId, plyr) => plyr);
+            
+            _hub.SubmitWin(50000);
+            Assert.That(PlayerList[_connectionId].BestTime, Is.EqualTo(50000));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(1));
+
+            _hub.SubmitWin(45000);
+            Assert.That(PlayerList[_connectionId].BestTime, Is.EqualTo(45000));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(2));
+
+            _hub.SubmitWin(75000);
+            Assert.That(PlayerList[_connectionId].BestTime, Is.EqualTo(45000));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(2));
         }
     }
 }
