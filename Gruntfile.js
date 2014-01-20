@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     'use strict';
 
     grunt.initConfig({
@@ -40,6 +40,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
+                        flatten: true,
                         src: ['web/js/minesweeper.js'],
                         dest: 'server/MinesweeperServer/MinesweeperServer/Scripts'
                     }

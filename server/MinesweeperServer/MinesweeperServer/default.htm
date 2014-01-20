@@ -1,19 +1,19 @@
 ﻿<!DOCTYPE html>
-<html ng-app="minesweeper">
+<html ng-app="minesweeper-signalr">
 <head>
   <title></title>
 </head>
 <body>
   <div ng-controller="MultiplayerGameCtrl">
-    <div ng-repeat="player in players">
-      {{ player | json }}
+    <div ng-repeat="player in players track by player.ConnectionId">
+      {{ player.Name }}
     </div>
   </div>
 
   <script src="Scripts/jquery-1.10.2.min.js"></script>
   <script src="Scripts/jquery.signalR-1.1.4.min.js"></script>
   <script src="Scripts/angular.min.js"></script>
-  <script src="signalr/hubs"></script>
+  <script src="/signalr/hubs"></script>
   <script src="Scripts/minesweeper.js"></script>
   <script src="Scripts/minesweeper-signalr.js"></script>
 </body>
