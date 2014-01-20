@@ -10,16 +10,12 @@ checkout the various branches.
 
 ----
 
-# Multiplayer with SignalR Step 3: Get a list of connected players
+# Multiplayer with SignalR Step 4: Set player name
 
-### On the Server:
+### On the server:
+- Add a `SetName` method to the hub that sets the `Name` of the `Player` in the PlayerList.
+- Have `SetName` call `SendPlayerList`
 
-- Handle `OnConnect` and `OnDisconnect` in your Hub to maintain a list of Players.
-- Create a Hub method `SendPlayers` to Broadcast a Player List to all connected clients.
-- Have `OnConnect` and `OnDisconnect` call `SendPlayers` after it updates the list.
-
-### On the Client:
-
-- Have the server service fire an Angular event when the player list has been updated.
-- Create a controller for your multiplayer game called `MultiplayerGameCtrl`, have it handle the
-event we just created and update a property on the $scope to display.
+### On the client:
+- Add a `setName` method to the `minesweeperServer` service that calls `SetName` on the hub.
+- Set up a form to update the user's name that calls `minesweeperServer.setName()`
