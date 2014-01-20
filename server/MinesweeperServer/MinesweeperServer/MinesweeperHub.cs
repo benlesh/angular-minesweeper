@@ -54,12 +54,31 @@ namespace MinesweeperServer
                 SendPlayerList();
             }
         }
+
+        public void SubmitWin(long millisecondsToWin)
+        {
+            Player player;
+            if (PlayerList.TryGetValue(Context.ConnectionId, out player)) {
+                bool updated = false;
+                lock (player)
+                {
+                    if (!player.BestTime.HasValue || player.BestTime > millisecondsToWin) {
+                        player.BestTime = millisecondsToWin;
+                        updated = true;
+                    }
+                }
+                if (updated) {
+                    SendPlayerList();
+                }
+            }
+        }
     }
 
     public class Player {
         public readonly string ConnectionId ;
         public string Name { get; set; }
-        public IEnumerable<IEnumerable<bool>> Grid { get; set; } 
+        public IEnumerable<IEnumerable<bool>> Grid { get; set; }
+        public long? BestTime { get; set; }
 
         public Player(string connectionId) {
             ConnectionId = connectionId;

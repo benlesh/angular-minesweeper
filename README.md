@@ -21,3 +21,4 @@ the stored value, or if the stored value is null.
 ### On the client
 - Whenever the user wins, have it send the number of milliseconds it took to the server with the hub's `SubmitWin`
 - When the playerList is retrieved, find the player with the lowest time to win and flag them as "king".
+- Also use a filter to sort the fastest winning opponent to the top of the list.

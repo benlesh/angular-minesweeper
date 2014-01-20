@@ -75,5 +75,22 @@ namespace MinesweeperServer.Tests
             Assert.That(PlayerList[_connectionId].Grid, Is.EqualTo(grid));
             Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(1));
         }
+
+        [Test]
+        public void SubmitWinTest() {
+            PlayerList.AddOrUpdate(_connectionId, (connId) => new Player(connId), (connId, plyr) => plyr);
+            
+            _hub.SubmitWin(50000);
+            Assert.That(PlayerList[_connectionId].BestTime, Is.EqualTo(50000));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(1));
+
+            _hub.SubmitWin(45000);
+            Assert.That(PlayerList[_connectionId].BestTime, Is.EqualTo(45000));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(2));
+
+            _hub.SubmitWin(75000);
+            Assert.That(PlayerList[_connectionId].BestTime, Is.EqualTo(45000));
+            Assert.That(_hub.SendPlayerListCalled, Is.EqualTo(2));
+        }
     }
 }
