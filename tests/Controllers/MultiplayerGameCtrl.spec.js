@@ -33,7 +33,7 @@ describe('minesweeper MultiplayerGameCtrl', function () {
 
         beforeEach(function () {
             playerList = [
-                {id: 1, name: 'foo'},
+                { id: 1, name: 'foo'},
                 { id: 2, name: 'bar'}
             ];
             ctrl.onPlayerList(null, playerList);
